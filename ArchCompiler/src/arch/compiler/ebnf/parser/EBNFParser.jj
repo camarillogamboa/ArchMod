@@ -1,0 +1,54 @@
+options {
+    STATIC = false;
+}
+
+PARSER_BEGIN(EBNFParser)
+
+public class EBNFParser {
+
+}
+
+PARSER_END(EBNFParser)
+
+SKIP : {
+	< " " | "\t" | "\r" | "\n" | "\f" | "\t\n" >
+}
+
+TOKEN : {
+    <#unicode_letter: ["a"-"z"] | ["A"-"Z"] |("\u00e1")|("\u00e9") | ("\u00ed") | ("\u00f3") | ("\u00fa") | ("\u00c1")
+	| ("\u00c9") | ("\u00cd") | ("\u00d3") | ("\u00da") | ("\u00D1") | ("\u00F1") | ("\u00fc")>
+    |<#unicode_digit: ["0"-"9"] >
+}
+
+TOKEN : {
+    <#letter: <unicode_letter> | "_" >
+    |<#decimal_digit: ["0"-"9"] >
+    |<#binary_digit: "0" | "1" >
+    |<#octal_digit: ["0"-"7"] >
+    |<#hex_digit: ["0"-"9"] | ["A"-"F"] | ["a"-"f"] >
+}
+
+TOKEN : {
+    <identifier: <letter> (<letter> | <unicode_digit>)* >
+}
+
+TOKEN : {
+    <sum: "+" >
+    |<difference: "-" >
+    |<product: "*" >
+    |<quotient: "/" >
+    |<remainder: "%" >
+    |<bitwise_xor: "^" >
+    |<arrow: "->" >
+    |<left_parenthesis: "(" >
+    |<left_bracket: "[" >
+    |<left_brace: "{" >
+    |<comma: "," >
+    |<dot: "." >
+    |<right_parenthesis: ")" >
+    |<right_bracket: "]" >
+    |<right_brace: "}" >
+    |<colon: ":" >
+}
+
+

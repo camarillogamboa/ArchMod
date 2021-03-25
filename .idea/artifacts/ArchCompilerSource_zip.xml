@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact build-on-make="true" name="ArchCompilerSource:zip">
+    <output-path>$PROJECT_DIR$/../../../../../../ProgramData/Java/archmod-1.0/source</output-path>
+    <root id="root">
+      <element id="archive" name="archcompiler.zip">
+        <element id="module-source" name="ArchCompiler" />
+      </element>
+    </root>
+  </artifact>
+</component>

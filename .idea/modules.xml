@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/ArchCompiler/ArchCompiler.iml" filepath="$PROJECT_DIR$/ArchCompiler/ArchCompiler.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ArchComponent/ArchComponent.iml" filepath="$PROJECT_DIR$/ArchComponent/ArchComponent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ArchData/ArchData.iml" filepath="$PROJECT_DIR$/ArchData/ArchData.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ArchMath/ArchMath.iml" filepath="$PROJECT_DIR$/ArchMath/ArchMath.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ArchNode/ArchNode.iml" filepath="$PROJECT_DIR$/ArchNode/ArchNode.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ArchTools/ArchTools.iml" filepath="$PROJECT_DIR$/ArchTools/ArchTools.iml" />
+    </modules>
+  </component>
+</project>

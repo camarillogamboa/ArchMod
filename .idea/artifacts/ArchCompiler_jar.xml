@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="ArchCompiler:jar">
+    <output-path>$PROJECT_DIR$/../../../../../../ProgramData/Java/archmod-1.0/lib</output-path>
+    <root id="archive" name="archcompiler.jar">
+      <element id="module-output" name="ArchCompiler" />
+    </root>
+  </artifact>
+</component>

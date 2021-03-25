@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact build-on-make="true" name="ArchNodeSource:zip">
+    <output-path>$PROJECT_DIR$/../../../../../../ProgramData/Java/archmod-1.0/lib</output-path>
+    <root id="root">
+      <element id="archive" name="archnode.zip">
+        <element id="module-source" name="ArchNode" />
+      </element>
+    </root>
+  </artifact>
+</component>

@@ -1,0 +1,279 @@
+options {
+     STATIC = false;
+}
+
+PARSER_BEGIN(DiMath)
+
+package arch.math.dimath.parser;
+
+import arch.math.dimath.Lexeme;
+import java.util.List;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Map;
+
+/*
+    (){}->0
+    (){a}->a
+    (x){}->x
+    x->x
+    x{a,b,c}->x*a+b/c
+    x{a}->x+a
+    (x,y,z)-> x*y*z
+    ()->35
+    ()->-45
+    (){a:[0]}->a^2
+    (){a:[0],b:4.87,c:[1],d:[2]}->b*a+c^d
+    (x,y,z){a:1,b:2,c:3}->x^c+x*y+z^(a^sin(b))
+ */
+
+final class DiMath{
+
+    private final HashSet<String> identifiers;
+
+    {
+        this.identifiers = new HashSet<>();
+    }
+
+    private Lexeme lex(Lexeme.AbstractKind kind, Token tk){
+        return new Lexeme(kind, tk.image);
+    }
+
+}
+PARSER_END(DiMath)
+
+//----------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------Lexical----------------------------------------------------------
+
+SKIP : {
+	< " " | "\t" | "\r" | "\n" | "\f" | "\t\n" >
+}
+
+TOKEN : {
+    <#unicode_letter: ["a"-"z"] | ["A"-"Z"] |("\u00e1")|("\u00e9") | ("\u00ed") | ("\u00f3") | ("\u00fa") | ("\u00c1")
+	| ("\u00c9") | ("\u00cd") | ("\u00d3") | ("\u00da") | ("\u00D1") | ("\u00F1") | ("\u00fc")>
+    |<#unicode_digit: ["0"-"9"] >
+}
+
+TOKEN : {
+    <#letter: <unicode_letter> | "_" >
+    |<#decimal_digit: ["0"-"9"] >
+    |<#binary_digit: "0" | "1" >
+    |<#octal_digit: ["0"-"7"] >
+    |<#hex_digit: ["0"-"9"] | ["A"-"F"] | ["a"-"f"] >
+}
+
+TOKEN : {
+    <identifier: <letter> (<letter> | <unicode_digit>)* >
+}
+
+TOKEN : {
+    <sum: "+" >
+    |<difference: "-" >
+    |<product: "*" >
+    |<quotient: "/" >
+    |<remainder: "%" >
+    |<bitwise_xor: "^" >
+    |<arrow: "->" >
+    |<left_parenthesis: "(" >
+    |<left_bracket: "[" >
+    |<left_brace: "{" >
+    |<comma: "," >
+    |<dot: "." >
+    |<right_parenthesis: ")" >
+    |<right_bracket: "]" >
+    |<right_brace: "}" >
+    |<colon: ":" >
+}
+
+TOKEN : {
+    <int_lit: <decimal_lit> | <binary_lit> | <octal_lit> | <hex_lit> >
+    |<#decimal_lit: "0" | ["1"-"9"] (("_")? <decimal_digits>)? >
+    |<#binary_lit: "0" ("b" | "B") ("_")? <binary_digits> >
+    |<#octal_lit: "0" ("o" | "O")? ("_")? <octal_digits> >
+    |<#hex_lit: "0" ("x" | "X") ("_")? <hex_digits> >
+    |<decimal_digits: <decimal_digit> (("_")? <decimal_digit>)* >
+    |<#binary_digits: <binary_digit> (("_")? <binary_digit>)* >
+    |<#octal_digits: <octal_digit> (("_")? <octal_digit>)* >
+    |<hex_digits: <hex_digit> (("_")? <hex_digit>)* >
+}
+
+TOKEN : {
+    <float_lit: <decimal_float_lit> | <hex_float_lit> >
+    |<#decimal_float_lit: <decimal_digits> "." (<decimal_digits>)? (<decimal_exponent>)?
+    |<decimal_digits> <decimal_exponent> | "." <decimal_digits> (<decimal_exponent>)? >
+    |<#decimal_exponent: ("e" | "E") ("+" | "-")? <decimal_digits> >
+    |<#hex_float_lit: "0" ("x" | "X") <hex_mantissa> <hex_exponent> >
+    |<#hex_mantissa: ("_")? <hex_digits> "." (<hex_digits>)? | ("_")? <hex_digits> | "." <hex_digits> >
+    |<#hex_exponent: ("p" | "P") ("+" | "-")? <decimal_digits> >
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------Sintactic--------------------------------------------------------
+
+//----------------------------------------------------Expression--------------------------------------------------------
+private void NumericLiteral(List<Lexeme> expr):{Token tk = null;}{
+    tk = <int_lit> {expr.add(lex(Lexeme.AbstractKind.INT_LIT,tk));}
+    |
+    tk = <float_lit> {expr.add(lex(Lexeme.AbstractKind.FLOAT_LIT,tk));}
+}
+
+private void Operator(List<Lexeme> expr):{Token tk = null;}{
+    tk = <sum> {expr.add(lex(Lexeme.AbstractKind.OPERATOR,tk));}
+	|
+	tk = <difference> {expr.add(lex(Lexeme.AbstractKind.OPERATOR,tk));}
+	|
+	tk = <product> {expr.add(lex(Lexeme.AbstractKind.OPERATOR,tk));}
+	|
+	tk = <quotient> {expr.add(lex(Lexeme.AbstractKind.OPERATOR,tk));}
+	|
+	tk = <remainder> {expr.add(lex(Lexeme.AbstractKind.OPERATOR,tk));}
+	|
+	tk = <bitwise_xor> {expr.add(lex(Lexeme.AbstractKind.OPERATOR,tk));}
+}
+
+private void FunctionReference(List<Lexeme> expr) : {Token tk;}{
+    tk = <identifier> {expr.add(lex(Lexeme.AbstractKind.FUNCTION_REFERENCE,tk));}
+}
+
+private void Argument(List<Lexeme> expr) : {}{
+    GroupedExpression(expr)
+}
+
+private void Call(List<Lexeme> expr) : {}{
+    FunctionReference(expr)
+    {expr.add(new Lexeme(Lexeme.AbstractKind.OPERATOR,"<"));}
+    Argument(expr)
+}
+
+private void ParameterFactorReference(List<Lexeme> expr):{Token tk;}{
+    tk = <identifier> {expr.add(lex(Lexeme.AbstractKind.PARAMETER_FACTOR_REFERENCE,tk));}
+}
+
+private void Operand(List<Lexeme> expr):{Token tk;}{
+    NumericLiteral(expr)
+    |
+    LOOKAHEAD(2)
+    Call(expr)
+    |
+    GroupedExpression(expr)
+    |
+    LOOKAHEAD(2)
+    ParameterFactorReference(expr)
+}
+
+public void Expression(List<Lexeme> expr):{Token tk = null;}{
+    (
+        try{
+            tk = <sum>
+            |
+            tk = <difference>
+        }finally{
+            expr.add(new Lexeme(Lexeme.AbstractKind.INT_LIT,"0"));
+            expr.add(lex(Lexeme.AbstractKind.OPERATOR,tk));
+        }
+    )?
+    Operand(expr)
+    (
+        Operator(expr)
+        Operand(expr)
+    )*
+}
+
+private void GroupedExpression(List<Lexeme> expr):{Token tk;}{
+    tk = <left_parenthesis> {expr.add(lex(Lexeme.AbstractKind.LEFT_GROUPER,tk));}
+    Expression(expr)
+    tk = <right_parenthesis> {expr.add(lex(Lexeme.AbstractKind.RIGHT_GROUPER,tk));}
+}
+
+//----------------------------------------------------Signature---------------------------------------------------------
+private void ParameterBlock(List<Lexeme> parameters) : {}{
+    ParameterDeclaration(parameters)
+    |
+    <left_parenthesis>
+    (
+        ParameterDeclaration(parameters)
+        (
+            <comma>
+            ParameterDeclaration(parameters)
+        )*
+    )?
+    <right_parenthesis>
+}
+
+private void ParameterDeclaration(List<Lexeme> parameters) : {Token tk;}{
+    tk = <identifier> {
+        parameters.add(lex(Lexeme.AbstractKind.PARAMETER_NAME,tk));
+        identifiers.add(tk.image);
+    }
+}
+
+private void FactorBlock(Map<Lexeme,Lexeme> factors) : {}{
+    <left_brace>
+    (
+        FactorDeclaration(factors)
+        (
+            <comma>
+            FactorDeclaration(factors)
+        )*
+    )?
+    <right_brace>
+}
+
+private void FactorDeclaration(Map<Lexeme,Lexeme> factors) : {Token tk; Lexeme key, value = null;}{
+    tk = <identifier> {key = lex(Lexeme.AbstractKind.FACTOR_NAME,tk);}
+    (
+        <colon>
+        (
+            tk = <int_lit> {value = lex(Lexeme.AbstractKind.INT_LIT, tk);}
+            |
+            tk = <float_lit> {value = lex(Lexeme.AbstractKind.FLOAT_LIT, tk);}
+            |
+            <left_bracket>
+            tk = <int_lit> {value = lex(Lexeme.AbstractKind.INDEX_REFERENCE, tk);}
+            <right_bracket>
+        )
+    )?
+    {
+        factors.put(key, value != null ? value : new Lexeme(Lexeme.AbstractKind.INT_LIT, "0"));
+        identifiers.add(key.toString());
+    }
+}
+
+public void Signature(List<Lexeme> parameters, Map<Lexeme,Lexeme> factors) : {}{
+    ParameterBlock(parameters)
+    (
+        FactorBlock(factors)
+    )?
+}
+
+public void Body(List<List<Lexeme>> exprMatrix) : {List<Lexeme> expr;}{
+	Expression(expr = new LinkedList<>()){
+		exprMatrix.add(expr);
+	}
+	|
+	<left_brace>
+	Expression(expr = new LinkedList<>()){
+		exprMatrix.add(expr);
+	}
+	(
+		<comma>
+		Expression(expr = new LinkedList<>()){
+			exprMatrix.add(expr);
+		}
+	)*
+	<right_brace>
+}
+
+//-------------------------------------------------LambdaExpression-----------------------------------------------------
+public void DiMathLambda(List<Lexeme> parameters, Map<Lexeme,Lexeme> factors, List<List<Lexeme>> exprMatrix) : {}{
+    Signature(parameters, factors)
+    <arrow>
+	Body(exprMatrix)
+}
+
+
+
+
+
+
