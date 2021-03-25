@@ -3,6 +3,7 @@ package arch.math.dimath;
 import arch.math.Mappable;
 import arch.math.dimath.parser.DiMathCompiler;
 import arch.tools.collection.LinkedStack;
+import arch.tools.collection.array.Arrays;
 import arch.tools.collection.node.EntryNode;
 import arch.tools.collection.readonly.IndexedTable;
 
@@ -63,51 +64,27 @@ public final class DiMathLambda implements Mappable, Supplier<double[]> {
     }
 
     public DiMathLambda(SignatureSet signatureSet, PostfixExpression[] postfixExpressions, DoubleSupplier... externals) throws DiMathException {
-        this(DiMathUtil.toIndexedTable(signatureSet.vars()), DiMathUtil.toIndexedTable(signatureSet.factors(), externals), postfixExpressions);
-    }
-
-    public DiMathLambda(SignatureSet signatureSet, PostfixExpression[] postfixExpressions, double... constants) throws DiMathException {
-        this(signatureSet, postfixExpressions, DiMathUtil.mapEachToDoubleSupplier(constants));
+        this(DiMathUtil.toIndexedTable(signatureSet.vars()), DiMathUtil.toIndexedTable(signatureSet.factors(), Arrays.readOnlyArray(externals)), postfixExpressions);
     }
 
     public DiMathLambda(SignatureSet signatureSet, InfixExpression[] infixExpressions, DoubleSupplier... externals) throws DiMathException {
-        this(DiMathUtil.toIndexedTable(signatureSet.vars()), DiMathUtil.toIndexedTable(signatureSet.factors(), externals), DiMathUtil.mapEachToPostfixExpression(infixExpressions));
-    }
-
-    public DiMathLambda(SignatureSet signatureSet, InfixExpression[] infixExpressions, double... constants) throws DiMathException {
-        this(signatureSet, infixExpressions, DiMathUtil.mapEachToDoubleSupplier(constants));
+        this(DiMathUtil.toIndexedTable(signatureSet.vars()), DiMathUtil.toIndexedTable(signatureSet.factors(), Arrays.readOnlyArray(externals)), DiMathUtil.mapEachToPostfixExpression(infixExpressions));
     }
 
     public DiMathLambda(SignatureSet signatureSet, List<List<Lexeme>> exprMatrix, DoubleSupplier... externals) throws DiMathException {
         this(signatureSet, exprMatrix.stream().map(InfixExpression::new).toArray(InfixExpression[]::new), externals);
     }
 
-    public DiMathLambda(SignatureSet signatureSet, List<List<Lexeme>> exprMatrix, double... constants) throws DiMathException {
-        this(signatureSet, exprMatrix, DiMathUtil.mapEachToDoubleSupplier(constants));
-    }
-
     public DiMathLambda(DiMathLambdaSet diMathLambdaSet, DoubleSupplier... externals) throws DiMathException {
         this(diMathLambdaSet.signatureSet(), diMathLambdaSet.expressions(), externals);
-    }
-
-    public DiMathLambda(DiMathLambdaSet diMathLambdaSet, double... constants) throws DiMathException {
-        this(diMathLambdaSet, DiMathUtil.mapEachToDoubleSupplier(constants));
     }
 
     public DiMathLambda(String lambdaExpression, DoubleSupplier... externals) throws DiMathException {
         this(DiMathCompiler.compileLambdaExpression(lambdaExpression), externals);
     }
 
-    public DiMathLambda(String lambdaExpression, double... constants) throws DiMathException {
-        this(lambdaExpression, DiMathUtil.mapEachToDoubleSupplier(constants));
-    }
-
     public DiMathLambda(File sourceFile, DoubleSupplier... externals) throws DiMathException {
         this(DiMathCompiler.compileLambdaExpression(sourceFile), externals);
-    }
-
-    public DiMathLambda(File sourceFile, double... constants) throws DiMathException {
-        this(sourceFile, DiMathUtil.mapEachToDoubleSupplier(constants));
     }
 
     public IndexedTable<String, Variable> getParameters() {

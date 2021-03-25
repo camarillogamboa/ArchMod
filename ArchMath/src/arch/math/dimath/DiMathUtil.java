@@ -2,9 +2,9 @@ package arch.math.dimath;
 
 import arch.math.operator.DoubleArithmetic;
 import arch.math.operator.Function;
-import arch.tools.collection.array.ReadOnlyReferenceArray;
 import arch.tools.collection.array.ReadOnlyReferenceVector;
 import arch.tools.collection.array.ReferenceArrayFiller;
+import arch.tools.collection.iterator.IndexedIteratorBase;
 import arch.tools.collection.node.ComparableEntryNode;
 import arch.tools.collection.readonly.IndexedTable;
 
@@ -111,8 +111,9 @@ public interface DiMathUtil {
         return IndexedTable.create(array);
     }
 
-    static IndexedTable<String, DoubleSupplier> toIndexedTable(Map<Lexeme, Lexeme> factors, double... constants) throws DiMathException {
-        return toIndexedTable(factors, new ReadOnlyReferenceVector<>() {
+    static ReadOnlyReferenceVector<DoubleSupplier> toReadOnlyReferenceVector(double... constants) {
+        return new ReadOnlyReferenceVector<>() {
+
             @Override
             public DoubleSupplier valueOf(int index) {
                 var value = constants[index];
@@ -126,13 +127,22 @@ public interface DiMathUtil {
 
             @Override
             public Iterator<DoubleSupplier> iterator() {
-                throw new UnsupportedOperationException("Operación no soportada");
-            }
-        });
-    }
 
-    static IndexedTable<String, DoubleSupplier> toIndexedTable(Map<Lexeme, Lexeme> factors, DoubleSupplier... externals) throws DiMathException {
-        return toIndexedTable(factors, new ReadOnlyReferenceArray<>(externals));
+                final class LocalIterator extends IndexedIteratorBase implements Iterator<DoubleSupplier> {
+
+                    public LocalIterator() {
+                        super(constants.length);
+                    }
+
+                    @Override
+                    public DoubleSupplier next() {
+                        return valueOf(intCursor.next());
+                    }
+                }
+
+                return new LocalIterator();
+            }
+        };
     }
 
     static IndexedTable<String, DoubleSupplier> toIndexedTable(Map<Lexeme, Lexeme> factors, ReadOnlyReferenceVector<DoubleSupplier> externals) throws DiMathException {
