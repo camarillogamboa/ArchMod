@@ -2,7 +2,6 @@ package arch.tools.collection.iterator;
 
 import arch.tools.function.IntToCharFunction;
 
-import java.util.NoSuchElementException;
 import java.util.Objects;
 
 public final class IndexedCharIterator extends IndexedIteratorBase implements CharIterator {
@@ -16,8 +15,7 @@ public final class IndexedCharIterator extends IndexedIteratorBase implements Ch
 
     @Override
     public char next() {
-        if (hasNext()) return elementFunction.applyAsChar(intCursor.next());
-        else throw new NoSuchElementException();
+        return elementFunction.applyAsChar(intCursor.next());
     }
 
 }

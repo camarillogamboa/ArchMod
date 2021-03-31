@@ -26,4 +26,5 @@ public final class Cursor<T> implements Iterator<T> {
     public T next() {
         return currentValue = iterator.next();
     }
+
 }

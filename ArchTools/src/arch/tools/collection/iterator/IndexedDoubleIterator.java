@@ -1,6 +1,5 @@
 package arch.tools.collection.iterator;
 
-import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.function.IntToDoubleFunction;
 
@@ -15,8 +14,7 @@ public final class IndexedDoubleIterator extends IndexedIteratorBase implements 
 
     @Override
     public double next() {
-        if (hasNext()) return elementfunction.applyAsDouble(intCursor.next());
-        else throw new NoSuchElementException();
+        return elementfunction.applyAsDouble(intCursor.next());
     }
 
 }

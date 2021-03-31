@@ -1,6 +1,5 @@
 package arch.tools.collection.iterator;
 
-import arch.tools.property.Properties;
 import arch.tools.property.ReadOnlyIntProperty;
 
 import java.io.Flushable;
@@ -21,7 +20,7 @@ public final class IntPointer implements IntIterator, Flushable {
 
             @Override
             public ReadOnlyIntProperty next() {
-                return Properties.readOnlyProperty(iterator.next());
+                return new ReadOnlyIntProperty(iterator.next());
             }
         });
     }

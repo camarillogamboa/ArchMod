@@ -1,6 +1,5 @@
 package arch.tools.collection.iterator;
 
-import arch.tools.property.Properties;
 import arch.tools.property.ReadOnlyFloatProperty;
 
 import java.io.Flushable;
@@ -19,7 +18,7 @@ public final class FloatPointer implements FloatIterator, Flushable {
 
             @Override
             public ReadOnlyFloatProperty next() {
-                return Properties.readOnlyProperty(iterator.next());
+                return new ReadOnlyFloatProperty(iterator.next());
             }
         });
     }

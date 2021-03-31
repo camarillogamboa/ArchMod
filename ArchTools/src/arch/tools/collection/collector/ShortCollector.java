@@ -3,7 +3,6 @@ package arch.tools.collection.collector;
 import arch.tools.collection.array.ShortArrayFiller;
 import arch.tools.collection.basic.BasicQueue;
 import arch.tools.collection.filler.ShortFiller;
-import arch.tools.property.Properties;
 import arch.tools.property.ReadOnlyShortProperty;
 
 import java.util.LinkedList;
@@ -20,7 +19,7 @@ public final class ShortCollector implements ShortFiller {
 
     @Override
     public void put(short value) {
-        queue.add(Properties.readOnlyProperty(value));
+        queue.add(new ReadOnlyShortProperty(value));
     }
 
     public List<Short> asList() {

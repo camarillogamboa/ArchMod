@@ -22,13 +22,11 @@ public class BasicQueue<E> implements Iterable<E>, Sizable {
     public boolean add(E e) {
         var node = new LinkedNode<>(e);
 
-        if (firts == null) {
-            firts = node;
-            latest = node;
-        } else {
-            latest.setNext(node);
-            latest = node;
-        }
+        if (firts == null) firts = node;
+        else latest.setNext(node);
+
+        latest = node;
+
         size++;
 
         return true;

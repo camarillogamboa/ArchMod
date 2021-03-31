@@ -47,4 +47,17 @@ public class Expression implements ReadOnlyReferenceVector<Lexeme>, Printable {
         forEach(l -> out.print(l.toString() + " "));
         out.println();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        var expression = (Expression) o;
+        return Objects.equals(lexemes, expression.lexemes);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(lexemes);
+    }
 }

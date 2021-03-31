@@ -1,6 +1,5 @@
 package arch.tools.collection.iterator;
 
-import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.function.IntPredicate;
 
@@ -15,8 +14,7 @@ public final class IndexedBooleanIterator extends IndexedIteratorBase implements
 
     @Override
     public boolean next() {
-        if (hasNext()) return elementFunction.test(intCursor.next());
-        else throw new NoSuchElementException();
+        return elementFunction.test(intCursor.next());
     }
 
 }

@@ -3,7 +3,6 @@ package arch.tools.collection.collector;
 import arch.tools.collection.array.IntArrayFiller;
 import arch.tools.collection.basic.BasicQueue;
 import arch.tools.collection.filler.IntFiller;
-import arch.tools.property.Properties;
 import arch.tools.property.ReadOnlyIntProperty;
 
 import java.util.LinkedList;
@@ -20,7 +19,7 @@ public final class IntCollector implements IntFiller {
 
     @Override
     public void put(int value) {
-        queue.add(Properties.readOnlyProperty(value));
+        queue.add(new ReadOnlyIntProperty(value));
     }
 
     public List<Integer> asList() {

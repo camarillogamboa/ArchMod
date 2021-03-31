@@ -1,6 +1,5 @@
 package arch.tools.collection.iterator;
 
-import arch.tools.property.Properties;
 import arch.tools.property.ReadOnlyByteProperty;
 
 import java.io.Flushable;
@@ -21,7 +20,7 @@ public final class BytePointer implements ByteIterator, Flushable {
 
             @Override
             public ReadOnlyByteProperty next() {
-                return Properties.readOnlyProperty(iterator.next());
+                return new ReadOnlyByteProperty(iterator.next());
             }
         });
     }

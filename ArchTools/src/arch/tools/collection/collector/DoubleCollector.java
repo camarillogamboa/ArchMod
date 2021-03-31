@@ -3,7 +3,6 @@ package arch.tools.collection.collector;
 import arch.tools.collection.array.DoubleArrayFiller;
 import arch.tools.collection.basic.BasicQueue;
 import arch.tools.collection.filler.DoubleFiller;
-import arch.tools.property.Properties;
 import arch.tools.property.ReadOnlyDoubleProperty;
 
 import java.util.LinkedList;
@@ -20,7 +19,7 @@ public final class DoubleCollector implements DoubleFiller {
 
     @Override
     public void put(double value) {
-        queue.add(Properties.readOnlyProperty(value));
+        queue.add(new ReadOnlyDoubleProperty(value));
     }
 
     public List<Double> asList() {

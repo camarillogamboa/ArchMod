@@ -2,7 +2,6 @@ package arch.tools.collection.iterator;
 
 import arch.tools.function.IntToFloatFunction;
 
-import java.util.NoSuchElementException;
 import java.util.Objects;
 
 public final class IndexedFloatIterator extends IndexedIteratorBase implements FloatIterator {
@@ -16,7 +15,7 @@ public final class IndexedFloatIterator extends IndexedIteratorBase implements F
 
     @Override
     public float next() {
-        if (hasNext()) return elementFunction.applyAsFloat(intCursor.next());
-        else throw new NoSuchElementException();
+        return elementFunction.applyAsFloat(intCursor.next());
     }
+
 }

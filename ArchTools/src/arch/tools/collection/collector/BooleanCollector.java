@@ -3,7 +3,6 @@ package arch.tools.collection.collector;
 import arch.tools.collection.array.BooleanArrayFiller;
 import arch.tools.collection.basic.BasicQueue;
 import arch.tools.collection.filler.BooleanFiller;
-import arch.tools.property.Properties;
 import arch.tools.property.ReadOnlyBooleanProperty;
 
 import java.util.LinkedList;
@@ -20,7 +19,7 @@ public final class BooleanCollector implements BooleanFiller {
 
     @Override
     public void put(boolean value) {
-        queue.add(Properties.readOnlyProperty(value));
+        queue.add(new ReadOnlyBooleanProperty(value));
     }
 
     public List<Boolean> asList() {

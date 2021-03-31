@@ -2,7 +2,6 @@ package arch.tools.collection.iterator;
 
 import arch.tools.function.IntToShortFunction;
 
-import java.util.NoSuchElementException;
 import java.util.Objects;
 
 public final class IndexedShortIterator extends IndexedIteratorBase implements ShortIterator {
@@ -16,7 +15,6 @@ public final class IndexedShortIterator extends IndexedIteratorBase implements S
 
     @Override
     public short next() {
-        if (hasNext()) return elementFunction.applyAsShort(intCursor.next());
-        else throw new NoSuchElementException();
+        return elementFunction.applyAsShort(intCursor.next());
     }
 }

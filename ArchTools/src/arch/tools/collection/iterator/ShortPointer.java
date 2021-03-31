@@ -1,6 +1,5 @@
 package arch.tools.collection.iterator;
 
-import arch.tools.property.Properties;
 import arch.tools.property.ReadOnlyShortProperty;
 
 import java.io.Flushable;
@@ -21,7 +20,7 @@ public final class ShortPointer implements ShortIterator, Flushable {
 
             @Override
             public ReadOnlyShortProperty next() {
-                return Properties.readOnlyProperty(iterator.next());
+                return new ReadOnlyShortProperty(iterator.next());
             }
         });
     }

@@ -25,4 +25,5 @@ public final class LongCursor implements LongIterator {
     public long next() {
         return currentValue = longIterator.next();
     }
+
 }

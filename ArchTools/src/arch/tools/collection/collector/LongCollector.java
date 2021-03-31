@@ -3,7 +3,6 @@ package arch.tools.collection.collector;
 import arch.tools.collection.array.LongArrayFiller;
 import arch.tools.collection.basic.BasicQueue;
 import arch.tools.collection.filler.LongFiller;
-import arch.tools.property.Properties;
 import arch.tools.property.ReadOnlyLongProperty;
 
 import java.util.LinkedList;
@@ -20,7 +19,7 @@ public final class LongCollector implements LongFiller {
 
     @Override
     public void put(long value) {
-        queue.add(Properties.readOnlyProperty(value));
+        queue.add(new ReadOnlyLongProperty(value));
     }
 
     public List<Long> asList() {

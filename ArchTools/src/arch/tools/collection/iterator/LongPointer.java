@@ -1,6 +1,5 @@
 package arch.tools.collection.iterator;
 
-import arch.tools.property.Properties;
 import arch.tools.property.ReadOnlyLongProperty;
 
 import java.io.Flushable;
@@ -21,7 +20,7 @@ public final class LongPointer implements LongIterator, Flushable {
 
             @Override
             public ReadOnlyLongProperty next() {
-                return Properties.readOnlyProperty(iterator.next());
+                return new ReadOnlyLongProperty(iterator.next());
             }
         });
     }

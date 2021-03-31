@@ -1,7 +1,6 @@
 package arch.tools.collection.iterator;
 
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.function.IntFunction;
 
@@ -16,7 +15,7 @@ public final class IndexedIterator<E> extends IndexedIteratorBase implements Ite
 
     @Override
     public E next() {
-        if (hasNext()) return elementFunction.apply(intCursor.next());
-        else throw new NoSuchElementException();
+        return elementFunction.apply(intCursor.next());
     }
+
 }

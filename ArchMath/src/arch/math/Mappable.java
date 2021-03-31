@@ -3,9 +3,7 @@ package arch.math;
 import arch.math.dimath.OrderedPair;
 import arch.tools.collection.StreamFactory;
 import arch.tools.collection.iterator.DoubleIterator;
-import arch.tools.collection.iterator.IteratorWrapper;
 import arch.tools.collection.iterator.Iterators;
-import arch.tools.collection.iterator.MappedIterator;
 
 import java.util.Iterator;
 import java.util.function.Consumer;
@@ -22,31 +20,66 @@ public interface Mappable {
     }
 
     default Iterator<OrderedPair> descriptorOf(Iterator<double[]> domain) {
-        return new MappedIterator<>(domain, this::map);
+        return new Iterator<>() {
+            @Override
+            public boolean hasNext() {
+                return domain.hasNext();
+            }
+
+            @Override
+            public OrderedPair next() {
+                return map(domain.next());
+            }
+        };
     }
 
     default Iterator<OrderedPair> descriptorOf(DoubleIterator... domains) {
-        switch (domains.length) {
-            case 0:
-                return descriptorOf(new IteratorWrapper<>(() -> false, () -> DEFAULT_DOMAIN_KEY));
-            case 1:
-                var domain = domains[0];
-                return descriptorOf(new IteratorWrapper<>(domain::hasNext, () -> new double[]{domain.next()}));
-            default:
-                return descriptorOf(new IteratorWrapper<>(() -> {
+        return switch (domains.length) {
+            case 0 -> descriptorOf(new Iterator<>() {
+                @Override
+                public boolean hasNext() {
+                    return false;
+                }
+
+                @Override
+                public double[] next() {
+                    return DEFAULT_DOMAIN_KEY;
+                }
+            });
+            case 1 -> descriptorOf(new Iterator<>() {
+
+                final DoubleIterator domain = domains[0];
+
+                @Override
+                public boolean hasNext() {
+                    return domain.hasNext();
+                }
+
+                @Override
+                public double[] next() {
+                    return new double[]{domain.next()};
+                }
+            });
+            default -> descriptorOf(new Iterator<>() {
+                @Override
+                public boolean hasNext() {
                     var flag = true;
 
                     for (var d : domains) flag = flag && d.hasNext();
 
                     return flag;
-                }, () -> {
+                }
+
+                @Override
+                public double[] next() {
                     var buffer = new double[domains.length];
 
                     for (int i = 0; i < buffer.length; i++) buffer[i] = domains[i].next();
 
                     return buffer;
-                }));
-        }
+                }
+            });
+        };
     }
 
     default Iterator<OrderedPair> descriptorOf(double[]... domains) {

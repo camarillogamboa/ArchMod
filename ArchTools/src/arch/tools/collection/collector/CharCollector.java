@@ -3,7 +3,6 @@ package arch.tools.collection.collector;
 import arch.tools.collection.array.CharArrayFiller;
 import arch.tools.collection.basic.BasicQueue;
 import arch.tools.collection.filler.CharFiller;
-import arch.tools.property.Properties;
 import arch.tools.property.ReadOnlyCharProperty;
 
 import java.util.LinkedList;
@@ -20,7 +19,7 @@ public final class CharCollector implements CharFiller {
 
     @Override
     public void put(char value) {
-        queue.add(Properties.readOnlyProperty(value));
+        queue.add(new ReadOnlyCharProperty(value));
     }
 
     public List<Character> asList() {

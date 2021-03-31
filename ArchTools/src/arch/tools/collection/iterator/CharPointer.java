@@ -1,6 +1,5 @@
 package arch.tools.collection.iterator;
 
-import arch.tools.property.Properties;
 import arch.tools.property.ReadOnlyCharProperty;
 
 import java.io.Flushable;
@@ -21,7 +20,7 @@ public final class CharPointer implements CharIterator, Flushable {
 
             @Override
             public ReadOnlyCharProperty next() {
-                return Properties.readOnlyProperty(iterator.next());
+                return new ReadOnlyCharProperty(iterator.next());
             }
         });
     }

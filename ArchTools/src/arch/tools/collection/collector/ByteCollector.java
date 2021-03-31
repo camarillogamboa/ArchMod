@@ -3,7 +3,6 @@ package arch.tools.collection.collector;
 import arch.tools.collection.array.ByteArrayFiller;
 import arch.tools.collection.basic.BasicQueue;
 import arch.tools.collection.filler.ByteFiller;
-import arch.tools.property.Properties;
 import arch.tools.property.ReadOnlyByteProperty;
 
 import java.util.LinkedList;
@@ -20,7 +19,7 @@ public final class ByteCollector implements ByteFiller {
 
     @Override
     public void put(byte value) {
-        queue.add(Properties.readOnlyProperty(value));
+        queue.add(new ReadOnlyByteProperty(value));
     }
 
     public List<Byte> asList() {

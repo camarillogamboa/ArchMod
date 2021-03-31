@@ -2,7 +2,6 @@ package arch.tools.collection.iterator;
 
 import arch.tools.function.IntToByteFunction;
 
-import java.util.NoSuchElementException;
 import java.util.Objects;
 
 public final class IndexedByteIterator extends IndexedIteratorBase implements ByteIterator {
@@ -16,7 +15,7 @@ public final class IndexedByteIterator extends IndexedIteratorBase implements By
 
     @Override
     public byte next() {
-        if (hasNext()) return elementFunction.applyAsByte(intCursor.next());
-        else throw new NoSuchElementException();
+        return elementFunction.applyAsByte(intCursor.next());
     }
+
 }

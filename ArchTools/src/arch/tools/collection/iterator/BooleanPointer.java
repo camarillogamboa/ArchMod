@@ -1,6 +1,5 @@
 package arch.tools.collection.iterator;
 
-import arch.tools.property.Properties;
 import arch.tools.property.ReadOnlyBooleanProperty;
 
 import java.io.Flushable;
@@ -21,7 +20,7 @@ public final class BooleanPointer implements BooleanIterator, Flushable {
 
             @Override
             public ReadOnlyBooleanProperty next() {
-                return Properties.readOnlyProperty(iterator.next());
+                return new ReadOnlyBooleanProperty(iterator.next());
             }
         });
     }

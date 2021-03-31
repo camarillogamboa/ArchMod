@@ -1,6 +1,5 @@
 package arch.tools.collection.iterator;
 
-import arch.tools.property.Properties;
 import arch.tools.property.ReadOnlyDoubleProperty;
 
 import java.io.Flushable;
@@ -21,7 +20,7 @@ public final class DoublePointer implements DoubleIterator, Flushable {
 
             @Override
             public ReadOnlyDoubleProperty next() {
-                return Properties.readOnlyProperty(iterator.next());
+                return new ReadOnlyDoubleProperty(iterator.next());
             }
         });
     }
