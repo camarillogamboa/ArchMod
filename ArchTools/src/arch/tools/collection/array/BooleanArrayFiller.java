@@ -21,9 +21,10 @@ public final class BooleanArrayFiller extends IndexedIteratorBase implements Boo
         array[intCursor.next()] = value;
     }
 
-    public void fillRemaining(IntPredicate action) {
+    public boolean[] fillRemaining(IntPredicate action) {
         Objects.requireNonNull(action);
         Iterators.iterate(intCursor, i -> array[i] = action.test(i));
+        return array;
     }
 
 }

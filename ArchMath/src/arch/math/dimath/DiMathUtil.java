@@ -4,12 +4,10 @@ import arch.math.operator.DoubleArithmetic;
 import arch.math.operator.Function;
 import arch.tools.collection.array.ReadOnlyReferenceVector;
 import arch.tools.collection.array.ReferenceArrayFiller;
-import arch.tools.collection.iterator.IndexedIteratorBase;
-import arch.tools.collection.node.ComparableEntryNode;
+import arch.tools.collection.node.ComparableEntryNodeBase;
 import arch.tools.collection.readonly.IndexedTable;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.DoubleBinaryOperator;
@@ -102,51 +100,17 @@ public interface DiMathUtil {
     }
 
     static IndexedTable<String, Variable> toIndexedTable(List<Lexeme> vars) {
-        ComparableEntryNode<String, Variable>[] array = new ComparableEntryNode[vars.size()];
+        ComparableEntryNodeBase<String, Variable>[] array = new ComparableEntryNodeBase[vars.size()];
 
         var filler = new ReferenceArrayFiller<>(array);
 
-        vars.forEach(lex -> filler.put(new ComparableEntryNode<>(lex.toString(), new Variable())));
+        vars.forEach(lex -> filler.put(new ComparableEntryNodeBase<>(lex.toString(), new Variable())));
 
-        return IndexedTable.create(array);
-    }
-
-    static ReadOnlyReferenceVector<DoubleSupplier> toReadOnlyReferenceVector(double... constants) {
-        return new ReadOnlyReferenceVector<>() {
-
-            @Override
-            public DoubleSupplier valueOf(int index) {
-                var value = constants[index];
-                return () -> value;
-            }
-
-            @Override
-            public int size() {
-                return constants.length;
-            }
-
-            @Override
-            public Iterator<DoubleSupplier> iterator() {
-
-                final class LocalIterator extends IndexedIteratorBase implements Iterator<DoubleSupplier> {
-
-                    public LocalIterator() {
-                        super(constants.length);
-                    }
-
-                    @Override
-                    public DoubleSupplier next() {
-                        return valueOf(intCursor.next());
-                    }
-                }
-
-                return new LocalIterator();
-            }
-        };
+        return new IndexedTable<>(array);
     }
 
     static IndexedTable<String, DoubleSupplier> toIndexedTable(Map<Lexeme, Lexeme> factors, ReadOnlyReferenceVector<DoubleSupplier> externals) throws DiMathException {
-        ComparableEntryNode<String, DoubleSupplier>[] array = new ComparableEntryNode[factors.size()];
+        ComparableEntryNodeBase<String, DoubleSupplier>[] array = new ComparableEntryNodeBase[factors.size()];
 
         var filler = new ReferenceArrayFiller<>(array);
 
@@ -160,22 +124,10 @@ public interface DiMathUtil {
                 case INDEX_REFERENCE -> ds = externals.valueOf(Integer.parseInt(entry.getValue().toString()));
                 default -> throw new DiMathException("Elemento de bloque de factores inválido");
             }
-            filler.put(new ComparableEntryNode<>(entry.getKey().toString(), ds));
+            filler.put(new ComparableEntryNodeBase<>(entry.getKey().toString(), ds));
         }
 
-        return IndexedTable.create(array);
-    }
-
-    static DoubleSupplier[] mapEachToDoubleSupplier(double... constants) {
-        var suppliers = new DoubleSupplier[constants.length];
-
-        for (int i = 0; i < suppliers.length; i++) {
-            var constant = constants[i];
-
-            suppliers[i] = () -> constant;
-        }
-
-        return suppliers;
+        return new IndexedTable<>(array);
     }
 
     static PostfixExpression[] mapEachToPostfixExpression(InfixExpression[] infixExpressions) throws DiMathException {

@@ -9,9 +9,7 @@ public interface ReadOnlyReferenceVector<E> extends Iterable<E>, Sizable {
     E valueOf(int index);
 
     default E[] toArray(IntFunction<E[]> factory) {
-        var array = factory.apply(size());
-        Arrays.filler(array).fillRemaining(this::valueOf);
-        return array;
+        return Arrays.fillerOf(factory.apply(size())).fillRemaining(this::valueOf);
     }
 
 }

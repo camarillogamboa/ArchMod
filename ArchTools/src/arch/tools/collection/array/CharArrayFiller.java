@@ -21,8 +21,10 @@ public final class CharArrayFiller extends IndexedIteratorBase implements CharFi
         array[intCursor.next()] = value;
     }
 
-    public void fillRemaining(IntToCharFunction action) {
+    public char[] fillRemaining(IntToCharFunction action) {
         Objects.requireNonNull(action);
         Iterators.iterate(intCursor, i -> array[i] = action.applyAsChar(i));
+        return array;
     }
+
 }

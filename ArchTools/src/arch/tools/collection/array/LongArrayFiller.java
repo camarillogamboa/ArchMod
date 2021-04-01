@@ -21,8 +21,10 @@ public final class LongArrayFiller extends IndexedIteratorBase implements LongFi
         array[intCursor.next()] = value;
     }
 
-    public void fillRemaining(IntToLongFunction action) {
+    public long[] fillRemaining(IntToLongFunction action) {
         Objects.requireNonNull(action);
         Iterators.iterate(intCursor, i -> array[i] = action.applyAsLong(i));
+        return array;
     }
+
 }

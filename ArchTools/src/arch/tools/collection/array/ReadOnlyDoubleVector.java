@@ -8,9 +8,7 @@ public interface ReadOnlyDoubleVector extends DoubleIterable, Sizable {
     double valueOf(int index);
 
     default double[] toArray() {
-        var array = new double[size()];
-        Arrays.filler(array).fillRemaining(this::valueOf);
-        return array;
+        return Arrays.fillerOf(new double[size()]).fillRemaining(this::valueOf);
     }
 
 }

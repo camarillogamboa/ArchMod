@@ -25,7 +25,7 @@ public final class CharSequenceVector implements ReadOnlyCharVector {
 
     @Override
     public CharIterator iterator() {
-        return Iterators.iterator(charSequence);
+        return Iterators.iteratorOf(charSequence);
     }
 
     @Override
@@ -40,4 +40,5 @@ public final class CharSequenceVector implements ReadOnlyCharVector {
     public int hashCode() {
         return Objects.hash(charSequence);
     }
+
 }

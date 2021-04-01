@@ -8,9 +8,7 @@ public interface ReadOnlyBooleanVector extends BooleanIterable, Sizable {
     boolean valueOf(int index);
 
     default boolean[] toArray() {
-        var array = new boolean[size()];
-        Arrays.filler(array).fillRemaining(this::valueOf);
-        return array;
+        return Arrays.fillerOf(new boolean[size()]).fillRemaining(this::valueOf);
     }
 
 }

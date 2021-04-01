@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 public class ReadOnlyCharArray implements ReadOnlyCharVector {
 
-    private final char[] elements;
+    protected final char[] elements;
 
     public ReadOnlyCharArray(char... elements) {
         this.elements = elements;
@@ -20,12 +20,12 @@ public class ReadOnlyCharArray implements ReadOnlyCharVector {
 
     @Override
     public final char valueOf(int index) {
-        return elements[index];
+        return elements[index < 0 ? elements.length + index : index];
     }
 
     @Override
     public final CharIterator iterator() {
-        return Iterators.iterator(elements);
+        return Iterators.iteratorOf(elements);
     }
 
     @Override

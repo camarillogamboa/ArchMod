@@ -1,15 +1,13 @@
 package arch.tools.collection.array;
 
-import arch.tools.collection.Sizable;
 import arch.tools.collection.iterator.Iterators;
-import arch.tools.collection.iterator.LongIterable;
 import arch.tools.collection.iterator.LongIterator;
 
 import java.util.Arrays;
 
-public class ReadOnlyLongArray implements LongIterable, Sizable {
+public class ReadOnlyLongArray implements ReadOnlyLongVector {
 
-    private final long[] elements;
+    protected final long[] elements;
 
     public ReadOnlyLongArray(long... elements) {
         this.elements = elements;
@@ -21,12 +19,12 @@ public class ReadOnlyLongArray implements LongIterable, Sizable {
     }
 
     public final long valueOf(int index) {
-        return elements[index];
+        return elements[index < 0 ? elements.length + index : index];
     }
 
     @Override
-    public LongIterator iterator() {
-        return Iterators.iterator(elements);
+    public final LongIterator iterator() {
+        return Iterators.iteratorOf(elements);
     }
 
     @Override

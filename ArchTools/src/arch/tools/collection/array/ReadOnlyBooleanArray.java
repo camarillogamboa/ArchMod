@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 public class ReadOnlyBooleanArray implements ReadOnlyBooleanVector {
 
-    private final boolean[] elements;
+    protected final boolean[] elements;
 
     public ReadOnlyBooleanArray(boolean... elements) {
         this.elements = elements;
@@ -19,12 +19,12 @@ public class ReadOnlyBooleanArray implements ReadOnlyBooleanVector {
     }
 
     public final boolean valueOf(int index) {
-        return elements[index];
+        return elements[index < 0 ? elements.length + index : index];
     }
 
     @Override
     public final BooleanIterator iterator() {
-        return Iterators.iterator(elements);
+        return Iterators.iteratorOf(elements);
     }
 
     @Override

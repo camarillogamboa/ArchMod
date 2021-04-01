@@ -8,9 +8,7 @@ public interface ReadOnlyByteVector extends ByteIterable, Sizable {
     byte valueOf(int index);
 
     default byte[] toArray() {
-        var array = new byte[size()];
-        Arrays.filler(array).fillRemaining(this::valueOf);
-        return array;
+        return Arrays.fillerOf(new byte[size()]).fillRemaining(this::valueOf);
     }
 
 }

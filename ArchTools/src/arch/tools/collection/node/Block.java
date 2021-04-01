@@ -1,6 +1,6 @@
 package arch.tools.collection.node;
 
-public final class Block<V> extends Node<V> {
+public final class Block<V> extends NodeBase<V> {
 
     private Block<V> next;
     private Block<V> previus;

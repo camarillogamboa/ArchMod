@@ -21,8 +21,9 @@ public final class DoubleArrayFiller extends IndexedIteratorBase implements Doub
         array[intCursor.next()] = value;
     }
 
-    public void fillRemaining(IntToDoubleFunction action) {
+    public double[] fillRemaining(IntToDoubleFunction action) {
         Objects.requireNonNull(action);
         Iterators.iterate(intCursor, i -> array[i] = action.applyAsDouble(i));
+        return array;
     }
 }

@@ -1,6 +1,6 @@
 package arch.tools.collection.node;
 
-public final class BinaryTreeNode<V> extends Node<V> {
+public final class BinaryTreeNode<V> extends NodeBase<V> {
 
     private BinaryTreeNode<V> parent;
 

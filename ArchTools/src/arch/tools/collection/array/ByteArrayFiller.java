@@ -21,8 +21,10 @@ public final class ByteArrayFiller extends IndexedIteratorBase implements ByteFi
         array[intCursor.next()] = value;
     }
 
-    public void fillRemaining(IntToByteFunction action) {
+    public byte[] fillRemaining(IntToByteFunction action) {
         Objects.requireNonNull(action);
         Iterators.iterate(intCursor, i -> array[i] = action.applyAsByte(i));
+        return array;
     }
+
 }

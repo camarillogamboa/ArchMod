@@ -17,13 +17,13 @@ public class Expression implements ReadOnlyReferenceVector<Lexeme>, Printable {
     }
 
     @Override
-    public final Lexeme valueOf(int index) {
-        return lexemes.get(index);
+    public final int size() {
+        return lexemes.size();
     }
 
     @Override
-    public final int size() {
-        return lexemes.size();
+    public final Lexeme valueOf(int index) {
+        return lexemes.get(index);
     }
 
     @Override
@@ -60,4 +60,5 @@ public class Expression implements ReadOnlyReferenceVector<Lexeme>, Printable {
     public int hashCode() {
         return Objects.hash(lexemes);
     }
+
 }

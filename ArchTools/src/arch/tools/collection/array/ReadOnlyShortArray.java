@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 public class ReadOnlyShortArray implements ReadOnlyShortVector {
 
-    private final short[] elements;
+    protected final short[] elements;
 
     public ReadOnlyShortArray(short... elements) {
         this.elements = elements;
@@ -20,12 +20,12 @@ public class ReadOnlyShortArray implements ReadOnlyShortVector {
 
     @Override
     public final short valueOf(int index) {
-        return elements[index];
+        return elements[index < 0 ? elements.length + index : index];
     }
 
     @Override
     public final ShortIterator iterator() {
-        return Iterators.iterator(elements);
+        return Iterators.iteratorOf(elements);
     }
 
     @Override

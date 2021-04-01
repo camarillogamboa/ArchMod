@@ -8,9 +8,7 @@ public interface ReadOnlyCharVector extends CharIterable, Sizable {
     char valueOf(int index);
 
     default char[] toArray() {
-        var array = new char[size()];
-        Arrays.filler(array).fillRemaining(this::valueOf);
-        return array;
+        return Arrays.fillerOf(new char[size()]).fillRemaining(this::valueOf);
     }
 
 }

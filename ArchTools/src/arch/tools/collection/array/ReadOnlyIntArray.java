@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 public class ReadOnlyIntArray implements ReadOnlyIntVector {
 
-    private final int[] elements;
+    protected final int[] elements;
 
     public ReadOnlyIntArray(int... elements) {
         this.elements = elements;
@@ -20,12 +20,12 @@ public class ReadOnlyIntArray implements ReadOnlyIntVector {
 
     @Override
     public final int valueOf(int index) {
-        return elements[index];
+        return elements[index < 0 ? elements.length + index : index];
     }
 
     @Override
     public final IntIterator iterator() {
-        return Iterators.iterator(elements);
+        return Iterators.iteratorOf(elements);
     }
 
     @Override

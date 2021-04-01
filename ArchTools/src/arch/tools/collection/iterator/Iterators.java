@@ -20,84 +20,84 @@ public final class Iterators {
     private Iterators() {
     }
 
-    public static ByteIterator iterator(byte... array) {
+    public static ByteIterator iteratorOf(byte... array) {
         return new IndexedByteIterator(array.length, i -> array[i]);
     }
 
-    public static ShortIterator iterator(short... array) {
+    public static ShortIterator iteratorOf(short... array) {
         return new IndexedShortIterator(array.length, i -> array[i]);
     }
 
-    public static IntIterator iterator(int... array) {
+    public static IntIterator iteratorOf(int... array) {
         return new IndexedIntIterator(array.length, i -> array[i]);
     }
 
-    public static LongIterator iterator(long... array) {
+    public static LongIterator iteratorOf(long... array) {
         return new IndexedLongIterator(array.length, i -> array[i]);
     }
 
-    public static FloatIterator iterator(float... array) {
+    public static FloatIterator iteratorOf(float... array) {
 
         return new IndexedFloatIterator(array.length, i -> array[i]);
     }
 
-    public static DoubleIterator iterator(double... array) {
+    public static DoubleIterator iteratorOf(double... array) {
         return new IndexedDoubleIterator(array.length, i -> array[i]);
     }
 
-    public static CharIterator iterator(char... array) {
+    public static CharIterator iteratorOf(char... array) {
         return new IndexedCharIterator(array.length, i -> array[i]);
     }
 
-    public static BooleanIterator iterator(boolean... array) {
+    public static BooleanIterator iteratorOf(boolean... array) {
         return new IndexedBooleanIterator(array.length, i -> array[i]);
     }
 
     @SafeVarargs
-    public static <E> Iterator<E> iterator(E... array) {
+    public static <E> Iterator<E> iteratorOf(E... array) {
         return new IndexedIterator<>(array.length, i -> array[i]);
     }
 
-    public static CharIterator iterator(CharSequence charSequence) {
+    public static CharIterator iteratorOf(CharSequence charSequence) {
         Objects.requireNonNull(charSequence);
         return new IndexedCharIterator(charSequence.length(), charSequence::charAt);
     }
 
     public static void iterate(ByteConsumer consumer, byte... elements) {
-        iterate(iterator(elements), consumer);
+        iterate(iteratorOf(elements), consumer);
     }
 
     public static void iterate(ShortConsumer consumer, short... elements) {
-        iterate(iterator(elements), consumer);
+        iterate(iteratorOf(elements), consumer);
     }
 
     public static void iterate(IntConsumer consumer, int... elements) {
-        iterate(iterator(elements), consumer);
+        iterate(iteratorOf(elements), consumer);
     }
 
     public static void iterate(LongConsumer consumer, long... elements) {
-        iterate(iterator(elements), consumer);
+        iterate(iteratorOf(elements), consumer);
     }
 
     public static void iterate(FloatConsumer consumer, float... elements) {
-        iterate(iterator(elements), consumer);
+        iterate(iteratorOf(elements), consumer);
     }
 
     public static void iterate(DoubleConsumer consumer, double... elements) {
-        iterate(iterator(elements), consumer);
+        iterate(iteratorOf(elements), consumer);
     }
 
     public static void iterate(CharConsumer consumer, char... elements) {
-        iterate(iterator(elements), consumer);
+        iterate(iteratorOf(elements), consumer);
     }
 
     public static void iterate(BooleanConsumer consumer, boolean... elements) {
-        iterate(iterator(elements), consumer);
+        iterate(iteratorOf(elements), consumer);
     }
 
     @SafeVarargs
     public static <E> void iterate(Consumer<E> consumer, E... elements) {
-        iterate(iterator(elements), consumer);
+        iterate(iteratorOf(elements), consumer);
     }
 
     public static void iterate(ByteIterator iterator, ByteConsumer consumer) {
@@ -155,78 +155,78 @@ public final class Iterators {
     }
 
     public static void iterate(CharSequence charSequence, CharConsumer consumer) {
-        iterate(iterator(charSequence), consumer);
+        iterate(iteratorOf(charSequence), consumer);
     }
 
-    public static ByteCursor cursor(ByteIterator iterator) {
+    public static ByteCursor cursorOf(ByteIterator iterator) {
         return new ByteCursor(iterator);
     }
 
-    public static ShortCursor cursor(ShortIterator iterator) {
+    public static ShortCursor cursorOf(ShortIterator iterator) {
         return new ShortCursor(iterator);
     }
 
-    public static IntCursor cursor(IntIterator iterator) {
+    public static IntCursor cursorOf(IntIterator iterator) {
         return new IntCursor(iterator);
     }
 
-    public static LongCursor cursor(LongIterator iterator) {
+    public static LongCursor cursorOf(LongIterator iterator) {
         return new LongCursor(iterator);
     }
 
-    public static FloatCursor cursor(FloatIterator iterator) {
+    public static FloatCursor cursorOf(FloatIterator iterator) {
         return new FloatCursor(iterator);
     }
 
-    public static DoubleCursor cursor(DoubleIterator iterator) {
+    public static DoubleCursor cursorOf(DoubleIterator iterator) {
         return new DoubleCursor(iterator);
     }
 
-    public static CharCursor cursor(CharIterator iterator) {
+    public static CharCursor cursorOf(CharIterator iterator) {
         return new CharCursor(iterator);
     }
 
-    public static BooleanCursor cursor(BooleanIterator iterator) {
+    public static BooleanCursor cursorOf(BooleanIterator iterator) {
         return new BooleanCursor(iterator);
     }
 
-    public static <E> Cursor<E> cursor(Iterator<E> iterator) {
+    public static <E> Cursor<E> cursorOf(Iterator<E> iterator) {
         return new Cursor<>(iterator);
     }
 
-    public static BytePointer pointer(ByteIterator iterator) {
+    public static BytePointer pointerOf(ByteIterator iterator) {
         return new BytePointer(iterator);
     }
 
-    public static ShortPointer pointer(ShortIterator iterator) {
+    public static ShortPointer pointerOf(ShortIterator iterator) {
         return new ShortPointer(iterator);
     }
 
-    public static IntPointer pointer(IntIterator iterator) {
+    public static IntPointer pointerOf(IntIterator iterator) {
         return new IntPointer(iterator);
     }
 
-    public static LongPointer pointer(LongIterator iterator) {
+    public static LongPointer pointerOf(LongIterator iterator) {
         return new LongPointer(iterator);
     }
 
-    public static FloatPointer pointer(FloatIterator iterator) {
+    public static FloatPointer pointerOf(FloatIterator iterator) {
         return new FloatPointer(iterator);
     }
 
-    public static DoublePointer pointer(DoublePointer iterator) {
+    public static DoublePointer pointerOf(DoublePointer iterator) {
         return new DoublePointer(iterator);
     }
 
-    public static CharPointer pointer(CharIterator iterator) {
+    public static CharPointer pointerOf(CharIterator iterator) {
         return new CharPointer(iterator);
     }
 
-    public static BooleanPointer pointer(BooleanIterator iterator) {
+    public static BooleanPointer pointerOf(BooleanIterator iterator) {
         return new BooleanPointer(iterator);
     }
 
-    public static <E> Pointer<E> pointer(Iterator<E> iterator) {
+    public static <E> Pointer<E> pointerOf(Iterator<E> iterator) {
         return new Pointer<>(iterator);
     }
 

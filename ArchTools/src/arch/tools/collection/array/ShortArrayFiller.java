@@ -21,8 +21,9 @@ public final class ShortArrayFiller extends IndexedIteratorBase implements Short
         array[intCursor.next()] = value;
     }
 
-    public void fillRemaining(IntToShortFunction action) {
+    public short[] fillRemaining(IntToShortFunction action) {
         Objects.requireNonNull(action);
         Iterators.iterate(intCursor, i -> array[i] = action.applyAsShort(i));
+        return array;
     }
 }

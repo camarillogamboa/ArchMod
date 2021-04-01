@@ -1,6 +1,6 @@
 package arch.tools.collection.node;
 
-public final class LinkedNode<V> extends Node<V> {
+public final class LinkedNode<V> extends NodeBase<V> {
 
     private LinkedNode<V> next;
 

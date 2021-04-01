@@ -1,28 +1,88 @@
 package arch.tools.collection.readonly;
 
 import arch.tools.collection.array.ReadOnlyReferenceArray;
-import arch.tools.collection.array.ReferenceArrayFiller;
+import arch.tools.collection.array.ReadOnlyReferenceVector;
 import arch.tools.collection.node.BinaryTreeNode;
 import arch.tools.collection.node.ComparableEntryNode;
+import arch.tools.collection.node.ComparableEntryNodeBase;
 
-import java.util.Map;
+import java.util.Iterator;
 import java.util.Objects;
-import java.util.function.Function;
-import java.util.function.IntFunction;
 
 public class IndexedTable<K extends Comparable<K>, V> extends ReadOnlyReferenceArray<ComparableEntryNode<K, V>> {
 
-    private BinaryTreeNode<ComparableEntryNode<K, V>> root;
+    private BinaryTreeNode<ComparableEntryNodeBase<K, V>> root;
+
+    private final ReadOnlyReferenceVector<K> keys;
+    private final ReadOnlyReferenceVector<V> values;
 
     @SafeVarargs
-    private IndexedTable(ComparableEntryNode<K, V>... entries) {
+    public IndexedTable(ComparableEntryNodeBase<K, V>... entries) {
         super(entries);
         for (var entry : entries)
             if (root == null) root = new BinaryTreeNode<>(entry);
             else placeNode(root, new BinaryTreeNode<>(entry));
+
+        this.keys = new ReadOnlyReferenceVector<>() {
+
+            @Override
+            public int size() {
+                return IndexedTable.this.size();
+            }
+
+            @Override
+            public K valueOf(int index) {
+                return IndexedTable.this.valueOf(index).getKey();
+            }
+
+            @Override
+            public Iterator<K> iterator() {
+                var iterator = IndexedTable.this.iterator();
+                return new Iterator<K>() {
+                    @Override
+                    public boolean hasNext() {
+                        return iterator.hasNext();
+                    }
+
+                    @Override
+                    public K next() {
+                        return iterator.next().getKey();
+                    }
+                };
+            }
+        };
+
+        this.values = new ReadOnlyReferenceVector<>() {
+
+            @Override
+            public int size() {
+                return IndexedTable.this.size();
+            }
+
+            @Override
+            public V valueOf(int index) {
+                return IndexedTable.this.valueOf(index).getValue();
+            }
+
+            @Override
+            public Iterator<V> iterator() {
+                var iterator = IndexedTable.this.iterator();
+                return new Iterator<>() {
+                    @Override
+                    public boolean hasNext() {
+                        return iterator.hasNext();
+                    }
+
+                    @Override
+                    public V next() {
+                        return iterator.next().getValue();
+                    }
+                };
+            }
+        };
     }
 
-    private void placeNode(BinaryTreeNode<ComparableEntryNode<K, V>> parent, BinaryTreeNode<ComparableEntryNode<K, V>> currentNode) {
+    private void placeNode(BinaryTreeNode<ComparableEntryNodeBase<K, V>> parent, BinaryTreeNode<ComparableEntryNodeBase<K, V>> currentNode) {
         int value = currentNode.getValue().compareTo(parent.getValue());
 
         if (value < 0) {
@@ -48,7 +108,7 @@ public class IndexedTable<K extends Comparable<K>, V> extends ReadOnlyReferenceA
         return null;
     }
 
-    private V findInTree(BinaryTreeNode<ComparableEntryNode<K, V>> currentNode, K key) {
+    private V findInTree(BinaryTreeNode<ComparableEntryNodeBase<K, V>> currentNode, K key) {
         if (currentNode != null) {
             int value = key.compareTo(currentNode.getValue().getKey());
 
@@ -59,61 +119,12 @@ public class IndexedTable<K extends Comparable<K>, V> extends ReadOnlyReferenceA
         return null;
     }
 
-    public K[] getKeys(IntFunction<K[]> factory) {
-        var array = factory.apply(size());
-
-        for (int i = 0; i < array.length; i++) array[i] = valueOf(i).getKey();
-
-        return array;
+    public ReadOnlyReferenceVector<K> getKeys() {
+        return keys;
     }
 
-    public V[] getValues(IntFunction<V[]> factory) {
-        var array = factory.apply(size());
-
-        for (int i = 0; i < array.length; i++) array[i] = valueOf(i).getValue();
-
-        return array;
-    }
-
-    @SafeVarargs
-    public static <K extends Comparable<K>, V> IndexedTable<K, V> create(ComparableEntryNode<K, V>... entries) {
-        return new IndexedTable<>(entries);
-    }
-
-    public static <K extends Comparable<K>, V> IndexedTable<K, V> create(Map<K, V> map) {
-        Objects.requireNonNull(map);
-        ComparableEntryNode<K, V>[] entries = new ComparableEntryNode[map.size()];
-
-        var filler = new ReferenceArrayFiller<>(entries);
-
-        for (var entry : map.entrySet()) filler.put(new ComparableEntryNode<>(entry.getKey(), entry.getValue()));
-
-        return create(entries);
-    }
-
-    public static <K extends Comparable<K>, V> IndexedTable<K, V> create(K[] keys, V[] values) {
-        Objects.requireNonNull(keys);
-        Objects.requireNonNull(values);
-        if (keys.length == values.length) {
-            ComparableEntryNode<K, V>[] entries = new ComparableEntryNode[keys.length];
-
-            for (int i = 0; i < entries.length; i++) entries[i] = new ComparableEntryNode<>(keys[i], values[i]);
-
-            return create(entries);
-        } else throw new IllegalArgumentException("llaves y valores deben de ser cantidades iguales");
-    }
-
-    private static <K extends Comparable<K>, V> IndexedTable<K, V> create(K[] keys, Function<K, V> function) {
-        Objects.requireNonNull(keys);
-        Objects.requireNonNull(function);
-
-        ComparableEntryNode<K, V>[] entries = new ComparableEntryNode[keys.length];
-
-        var filler = new ReferenceArrayFiller<>(entries);
-
-        for (var key : keys) filler.put(new ComparableEntryNode<>(key, function.apply(key)));
-
-        return create(entries);
+    public ReadOnlyReferenceVector<V> getValues() {
+        return values;
     }
 
 }

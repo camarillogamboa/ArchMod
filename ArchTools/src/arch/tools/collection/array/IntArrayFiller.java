@@ -21,8 +21,9 @@ public final class IntArrayFiller extends IndexedIteratorBase implements IntFill
         array[intCursor.next()] = value;
     }
 
-    public void fillRemaining(IntUnaryOperator action) {
+    public int[] fillRemaining(IntUnaryOperator action) {
         Objects.requireNonNull(action);
         Iterators.iterate(intCursor, i -> array[i] = action.applyAsInt(i));
+        return array;
     }
 }

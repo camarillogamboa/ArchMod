@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 public class ReadOnlyFloatArray implements ReadOnlyFloatVector {
 
-    private final float[] elements;
+    protected final float[] elements;
 
     public ReadOnlyFloatArray(float... elements) {
         this.elements = elements;
@@ -20,12 +20,12 @@ public class ReadOnlyFloatArray implements ReadOnlyFloatVector {
 
     @Override
     public final float valueOf(int index) {
-        return elements[index];
+        return elements[index < 0 ? elements.length + index : index];
     }
 
     @Override
     public final FloatIterator iterator() {
-        return Iterators.iterator(elements);
+        return Iterators.iteratorOf(elements);
     }
 
     @Override

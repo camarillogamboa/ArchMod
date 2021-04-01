@@ -21,8 +21,10 @@ public final class ReferenceArrayFiller<E> extends IndexedIteratorBase implement
         array[intCursor.next()] = value;
     }
 
-    public void fillRemaining(IntFunction<E> action) {
+    public E[] fillRemaining(IntFunction<E> action) {
         Objects.requireNonNull(action);
         Iterators.iterate(intCursor, i -> array[i] = action.apply(i));
+        return array;
     }
+
 }

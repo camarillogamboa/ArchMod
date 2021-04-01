@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 public class ReadOnlyDoubleArray implements ReadOnlyDoubleVector {
 
-    private final double[] elements;
+    protected final double[] elements;
 
     public ReadOnlyDoubleArray(double... elements) {
         this.elements = elements;
@@ -20,12 +20,12 @@ public class ReadOnlyDoubleArray implements ReadOnlyDoubleVector {
 
     @Override
     public final double valueOf(int index) {
-        return elements[index];
+        return elements[index < 0 ? elements.length + index : index];
     }
 
     @Override
     public final DoubleIterator iterator() {
-        return Iterators.iterator(elements);
+        return Iterators.iteratorOf(elements);
     }
 
     @Override
@@ -40,4 +40,5 @@ public class ReadOnlyDoubleArray implements ReadOnlyDoubleVector {
     public int hashCode() {
         return Arrays.hashCode(elements);
     }
+
 }

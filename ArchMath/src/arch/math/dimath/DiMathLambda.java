@@ -4,7 +4,7 @@ import arch.math.Mappable;
 import arch.math.dimath.parser.DiMathCompiler;
 import arch.tools.collection.LinkedStack;
 import arch.tools.collection.array.Arrays;
-import arch.tools.collection.node.EntryNode;
+import arch.tools.collection.node.EntryNodeBase;
 import arch.tools.collection.readonly.IndexedTable;
 
 import java.io.File;
@@ -32,7 +32,7 @@ public final class DiMathLambda implements Mappable, Supplier<double[]> {
 
         for (int i = 0; i < expressionTrees.length; i++) {
 
-            var s = new LinkedStack<EntryNode<String, DoubleSupplier>>();
+            var s = new LinkedStack<EntryNodeBase<String, DoubleSupplier>>();
 
             try {
                 for (var l : postfixExpressions[i]) {
@@ -52,7 +52,7 @@ public final class DiMathLambda implements Mappable, Supplier<double[]> {
                         }
                         default -> throw new IllegalArgumentException("Tipo de lexema no admitido");
                     }
-                    s.push(new EntryNode<>(sy, ds));
+                    s.push(new EntryNodeBase<>(sy, ds));
                 }
             } catch (IllegalArgumentException ex) {
                 throw new DiMathException(ex);
@@ -64,11 +64,11 @@ public final class DiMathLambda implements Mappable, Supplier<double[]> {
     }
 
     public DiMathLambda(SignatureSet signatureSet, PostfixExpression[] postfixExpressions, DoubleSupplier... externals) throws DiMathException {
-        this(DiMathUtil.toIndexedTable(signatureSet.vars()), DiMathUtil.toIndexedTable(signatureSet.factors(), Arrays.readOnlyArray(externals)), postfixExpressions);
+        this(DiMathUtil.toIndexedTable(signatureSet.vars()), DiMathUtil.toIndexedTable(signatureSet.factors(), Arrays.readOnlyArrayOf(externals)), postfixExpressions);
     }
 
     public DiMathLambda(SignatureSet signatureSet, InfixExpression[] infixExpressions, DoubleSupplier... externals) throws DiMathException {
-        this(DiMathUtil.toIndexedTable(signatureSet.vars()), DiMathUtil.toIndexedTable(signatureSet.factors(), Arrays.readOnlyArray(externals)), DiMathUtil.mapEachToPostfixExpression(infixExpressions));
+        this(DiMathUtil.toIndexedTable(signatureSet.vars()), DiMathUtil.toIndexedTable(signatureSet.factors(), Arrays.readOnlyArrayOf(externals)), DiMathUtil.mapEachToPostfixExpression(infixExpressions));
     }
 
     public DiMathLambda(SignatureSet signatureSet, List<List<Lexeme>> exprMatrix, DoubleSupplier... externals) throws DiMathException {
@@ -118,7 +118,7 @@ public final class DiMathLambda implements Mappable, Supplier<double[]> {
     }
 
     public Consumer<OrderedPair> createImpresor(PrintStream out) {
-        return new OrderedPairImpresor(out, parameters.getKeys(String[]::new));
+        return new OrderedPairImpresor(out, parameters.getKeys());
     }
 
     public Consumer<OrderedPair> createImpresor() {

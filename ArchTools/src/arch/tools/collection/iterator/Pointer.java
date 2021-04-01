@@ -27,13 +27,10 @@ public final class Pointer<E> implements Iterator<E>, Flushable {
     private E add(E e) {
         var node = new DoubleLinkedNode<>(e);
 
-        if (first == null) last = first = node;
-        else {
-            last.setNext(node);
-            last = node;
-        }
+        if (first == null) first = node;
+        else last.setNext(node);
 
-        pointer = node;
+        pointer = last = node;
 
         return e;
     }

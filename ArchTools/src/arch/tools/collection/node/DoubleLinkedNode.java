@@ -1,6 +1,6 @@
 package arch.tools.collection.node;
 
-public final class DoubleLinkedNode<V> extends Node<V> {
+public final class DoubleLinkedNode<V> extends NodeBase<V> {
 
     private DoubleLinkedNode<V> next;
     private DoubleLinkedNode<V> previus;

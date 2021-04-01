@@ -21,8 +21,9 @@ public final class FloatArrayFiller extends IndexedIteratorBase implements Float
         array[intCursor.next()] = value;
     }
 
-    public void fillRemaining(IntToFloatFunction action) {
+    public float[] fillRemaining(IntToFloatFunction action) {
         Objects.requireNonNull(action);
         Iterators.iterate(intCursor, i -> array[i] = action.applyAsFloat(i));
+        return array;
     }
 }

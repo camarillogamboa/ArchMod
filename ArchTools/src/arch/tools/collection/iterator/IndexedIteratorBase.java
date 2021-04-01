@@ -7,7 +7,7 @@ public class IndexedIteratorBase implements Sequential {
     protected final IntCursor intCursor;
 
     public IndexedIteratorBase(int limit) {
-        this.intCursor = Iterators.cursor(new IntIterator() {
+        this.intCursor = Iterators.cursorOf(new IntIterator() {
 
             int index;
 

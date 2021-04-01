@@ -1,6 +1,9 @@
 package arch.math.dimath;
 
 
+import arch.tools.collection.array.Arrays;
+import arch.tools.collection.array.ReadOnlyReferenceVector;
+
 import java.io.PrintStream;
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -8,30 +11,48 @@ import java.util.function.Consumer;
 public final class OrderedPairImpresor implements Consumer<OrderedPair> {
 
     private final PrintStream out;
-    private final String[] tags;
+    private final ReadOnlyReferenceVector<String> tags;
 
-    public OrderedPairImpresor(PrintStream out, String... tags) {
+    public OrderedPairImpresor(PrintStream out, ReadOnlyReferenceVector<String> tags) {
         this.out = Objects.requireNonNull(out);
         this.tags = tags;
     }
 
+    public OrderedPairImpresor(PrintStream out, String tags) {
+        this(out, Arrays.readOnlyArrayOf(tags));
+    }
+
     @Override
     public void accept(OrderedPair orderedPair) {
-        out.print("(");
 
-        var domainKey = orderedPair.domainKey();
+        double[] temp = orderedPair.domainKey();
 
-        for (int i = 0; i < domainKey.length - 1; i++) out.print(tags[i] + ": " + domainKey[i] + ", ");
+        int iMax = temp.length - 1;
 
-        if (domainKey.length > 0) out.print(tags[domainKey.length - 1] + ": " + domainKey[domainKey.length - 1]);
+        if (iMax == -1) out.print("()");
+        else {
+            out.print("(");
+            for (int i = 0; ; i++) {
+                out.print(tags.valueOf(i) + ": " + temp[i]);
+                if (i == iMax) {
+                    out.print(") -> {");
+                    break;
+                }
+                out.print(", ");
+            }
+        }
 
-        out.print(") → {");
+        temp = orderedPair.image();
+        iMax = temp.length - 1;
 
-        var image = orderedPair.image();
-        for (int i = 0; i < image.length - 1; i++) out.print(image[i] + ", ");
+        for (int i = 0; ; i++) {
+            out.print(temp[i]);
+            if (i == iMax) {
+                out.println("}");
+                break;
+            }
+            out.print(", ");
+        }
 
-        if (image.length > 0) out.print(image[image.length - 1]);
-
-        out.println("}");
     }
 }

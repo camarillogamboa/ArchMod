@@ -85,7 +85,7 @@ public interface Mappable {
     default Iterator<OrderedPair> descriptorOf(double[]... domains) {
         var iterators = new DoubleIterator[domains.length];
 
-        for (int i = 0; i < iterators.length; i++) iterators[i] = Iterators.iterator(domains[i]);
+        for (int i = 0; i < iterators.length; i++) iterators[i] = Iterators.iteratorOf(domains[i]);
 
         return descriptorOf(iterators);
     }

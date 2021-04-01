@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-public abstract class TreeNode<V> extends Node<V> {
+public abstract class TreeNode<V> extends NodeBase<V> {
 
     private int level;
 

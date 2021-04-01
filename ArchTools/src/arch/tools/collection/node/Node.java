@@ -1,31 +1,17 @@
 package arch.tools.collection.node;
 
-public class Node<V> {
+public interface Node<V> {
 
-    private V value;
+    void setValue(V value);
 
-    public Node(V value) {
-        this.value = value;
+    V getValue();
+
+    default boolean hasValue() {
+        return getValue() != null;
     }
 
-    public Node() {
-        this(null);
-    }
-
-    public final void setValue(V value) {
-        this.value = value;
-    }
-
-    public final V getValue() {
-        return value;
-    }
-
-    public final boolean hasValue() {
-        return value != null;
-    }
-
-    public final boolean equalsTo(Object o) {
-        return hasValue() && value.equals(o);
+    default boolean equalsTo(Object o) {
+        return hasValue() && getValue().equals(o);
     }
 
 }

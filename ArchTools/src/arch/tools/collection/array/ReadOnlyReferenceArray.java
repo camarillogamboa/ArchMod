@@ -7,7 +7,7 @@ import java.util.Iterator;
 
 public class ReadOnlyReferenceArray<E> implements ReadOnlyReferenceVector<E> {
 
-    private final E[] elements;
+    protected final E[] elements;
 
     @SafeVarargs
     public ReadOnlyReferenceArray(E... elements) {
@@ -21,12 +21,12 @@ public class ReadOnlyReferenceArray<E> implements ReadOnlyReferenceVector<E> {
 
     @Override
     public final E valueOf(int index) {
-        return elements[index];
+        return elements[index < 0 ? elements.length + index : index];
     }
 
     @Override
     public final Iterator<E> iterator() {
-        return Iterators.iterator(elements);
+        return Iterators.iteratorOf(elements);
     }
 
     @Override

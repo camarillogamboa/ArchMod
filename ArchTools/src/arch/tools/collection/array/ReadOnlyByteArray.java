@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 public class ReadOnlyByteArray implements ReadOnlyByteVector {
 
-    private final byte[] elements;
+    protected final byte[] elements;
 
     public ReadOnlyByteArray(byte... elements) {
         this.elements = elements;
@@ -20,12 +20,12 @@ public class ReadOnlyByteArray implements ReadOnlyByteVector {
 
     @Override
     public final byte valueOf(int index) {
-        return elements[index];
+        return elements[index < 0 ? elements.length + index : index];
     }
 
     @Override
     public final ByteIterator iterator() {
-        return Iterators.iterator(elements);
+        return Iterators.iteratorOf(elements);
     }
 
     @Override

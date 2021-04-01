@@ -8,9 +8,7 @@ public interface ReadOnlyShortVector extends ShortIterable, Sizable {
     short valueOf(int index);
 
     default short[] toArray() {
-        var array = new short[size()];
-        Arrays.filler(array).fillRemaining(this::valueOf);
-        return array;
+        return Arrays.fillerOf(new short[size()]).fillRemaining(this::valueOf);
     }
 
 }
