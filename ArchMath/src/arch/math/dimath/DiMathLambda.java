@@ -5,7 +5,7 @@ import arch.math.dimath.parser.DiMathCompiler;
 import arch.tools.collection.LinkedStack;
 import arch.tools.collection.array.Arrays;
 import arch.tools.collection.node.EntryNodeBase;
-import arch.tools.collection.readonly.IndexedTable;
+import arch.tools.collection.table.IndexedTable;
 
 import java.io.File;
 import java.io.PrintStream;
@@ -98,8 +98,9 @@ public final class DiMathLambda implements Mappable, Supplier<double[]> {
     }
 
     public void setValues(double... values) {
-        if (parameters.size() == values.length)
-            for (int i = 0; i < parameters.size(); i++) parameters.valueOf(i).getValue().setValue(values[i]);
+        var variables = parameters.getValues();
+        if (variables.size() == values.length)
+            for (int i = 0; i < variables.size(); i++) variables.valueOf(i).setValue(values[i]);
         else throw new IllegalArgumentException("Número de valores incompatible");
     }
 

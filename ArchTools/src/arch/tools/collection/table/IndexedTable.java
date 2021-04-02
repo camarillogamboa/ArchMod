@@ -1,24 +1,27 @@
-package arch.tools.collection.readonly;
+package arch.tools.collection.table;
 
-import arch.tools.collection.array.ReadOnlyReferenceArray;
+import arch.tools.collection.array.Arrays;
 import arch.tools.collection.array.ReadOnlyReferenceVector;
 import arch.tools.collection.node.BinaryTreeNode;
 import arch.tools.collection.node.ComparableEntryNode;
-import arch.tools.collection.node.ComparableEntryNodeBase;
 
 import java.util.Iterator;
 import java.util.Objects;
+import java.util.function.BiConsumer;
 
-public class IndexedTable<K extends Comparable<K>, V> extends ReadOnlyReferenceArray<ComparableEntryNode<K, V>> {
+public class IndexedTable<K extends Comparable<K>, V> implements ReadOnlyTable<K, V> {
 
-    private BinaryTreeNode<ComparableEntryNodeBase<K, V>> root;
+    private final ReadOnlyReferenceVector<ComparableEntryNode<K, V>> entryVector;
+
+    private BinaryTreeNode<ComparableEntryNode<K, V>> root;
 
     private final ReadOnlyReferenceVector<K> keys;
     private final ReadOnlyReferenceVector<V> values;
 
     @SafeVarargs
-    public IndexedTable(ComparableEntryNodeBase<K, V>... entries) {
-        super(entries);
+    public IndexedTable(ComparableEntryNode<K, V>... entries) {
+        this.entryVector = Arrays.readOnlyArrayOf(entries);
+
         for (var entry : entries)
             if (root == null) root = new BinaryTreeNode<>(entry);
             else placeNode(root, new BinaryTreeNode<>(entry));
@@ -27,18 +30,18 @@ public class IndexedTable<K extends Comparable<K>, V> extends ReadOnlyReferenceA
 
             @Override
             public int size() {
-                return IndexedTable.this.size();
+                return entryVector.size();
             }
 
             @Override
             public K valueOf(int index) {
-                return IndexedTable.this.valueOf(index).getKey();
+                return entryVector.valueOf(index).getKey();
             }
 
             @Override
             public Iterator<K> iterator() {
-                var iterator = IndexedTable.this.iterator();
-                return new Iterator<K>() {
+                var iterator = entryVector.iterator();
+                return new Iterator<>() {
                     @Override
                     public boolean hasNext() {
                         return iterator.hasNext();
@@ -56,17 +59,17 @@ public class IndexedTable<K extends Comparable<K>, V> extends ReadOnlyReferenceA
 
             @Override
             public int size() {
-                return IndexedTable.this.size();
+                return entryVector.size();
             }
 
             @Override
             public V valueOf(int index) {
-                return IndexedTable.this.valueOf(index).getValue();
+                return entryVector.valueOf(index).getValue();
             }
 
             @Override
             public Iterator<V> iterator() {
-                var iterator = IndexedTable.this.iterator();
+                var iterator = entryVector.iterator();
                 return new Iterator<>() {
                     @Override
                     public boolean hasNext() {
@@ -82,7 +85,12 @@ public class IndexedTable<K extends Comparable<K>, V> extends ReadOnlyReferenceA
         };
     }
 
-    private void placeNode(BinaryTreeNode<ComparableEntryNodeBase<K, V>> parent, BinaryTreeNode<ComparableEntryNodeBase<K, V>> currentNode) {
+    @Override
+    public int size() {
+        return entryVector.size();
+    }
+
+    private void placeNode(BinaryTreeNode<ComparableEntryNode<K, V>> parent, BinaryTreeNode<ComparableEntryNode<K, V>> currentNode) {
         int value = currentNode.getValue().compareTo(parent.getValue());
 
         if (value < 0) {
@@ -94,13 +102,14 @@ public class IndexedTable<K extends Comparable<K>, V> extends ReadOnlyReferenceA
         } else throw new RuntimeException("Entrada duplicada");
     }
 
+    @Override
     public final V get(K key) {
         Objects.requireNonNull(key);
-        if (!isEmpty()) {
+        if (!entryVector.isEmpty()) {
             {
-                var entry = valueOf(0);
+                var entry = entryVector.valueOf(0);
 
-                if (entry.getKey().equals(key) || (entry = valueOf(size() - 1)).getKey().equals(key))
+                if (entry.getKey().equals(key) || (entry = entryVector.valueOf(size() - 1)).getKey().equals(key))
                     return entry.getValue();
             }
             return findInTree(root, key);
@@ -108,7 +117,7 @@ public class IndexedTable<K extends Comparable<K>, V> extends ReadOnlyReferenceA
         return null;
     }
 
-    private V findInTree(BinaryTreeNode<ComparableEntryNodeBase<K, V>> currentNode, K key) {
+    private V findInTree(BinaryTreeNode<ComparableEntryNode<K, V>> currentNode, K key) {
         if (currentNode != null) {
             int value = key.compareTo(currentNode.getValue().getKey());
 
@@ -125,6 +134,24 @@ public class IndexedTable<K extends Comparable<K>, V> extends ReadOnlyReferenceA
 
     public ReadOnlyReferenceVector<V> getValues() {
         return values;
+    }
+
+    @Override
+    public TableIterator<K, V> iterator() {
+        var iterator = entryVector.iterator();
+        return new TableIterator<>() {
+            @Override
+            public boolean hasNext() {
+                return iterator.hasNext();
+            }
+
+            @Override
+            public void consumeNext(BiConsumer<K, V> consumer) {
+                var entry = iterator.next();
+                consumer.accept(entry.getKey(), entry.getValue());
+            }
+
+        };
     }
 
 }

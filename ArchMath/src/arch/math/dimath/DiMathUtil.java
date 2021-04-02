@@ -5,7 +5,7 @@ import arch.math.operator.Function;
 import arch.tools.collection.array.ReadOnlyReferenceVector;
 import arch.tools.collection.array.ReferenceArrayFiller;
 import arch.tools.collection.node.ComparableEntryNodeBase;
-import arch.tools.collection.readonly.IndexedTable;
+import arch.tools.collection.table.IndexedTable;
 
 import java.util.HashMap;
 import java.util.List;
