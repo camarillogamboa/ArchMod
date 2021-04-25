@@ -21,7 +21,7 @@ public class ReadOnlyReferenceArray<E> implements ReadOnlyReferenceVector<E> {
 
     @Override
     public final E valueOf(int index) {
-        return elements[index < 0 ? elements.length + index : index];
+        return elements[index];
     }
 
     @Override

@@ -1,6 +1,5 @@
 package arch.math.dimath;
 
-import arch.math.Mappable;
 import arch.math.dimath.parser.DiMathCompiler;
 import arch.tools.collection.LinkedStack;
 import arch.tools.collection.array.Arrays;
@@ -15,7 +14,7 @@ import java.util.function.Consumer;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
-public final class DiMathLambda implements Mappable, Supplier<double[]> {
+public final class DiMathLambda implements Supplier<double[]> {
 
     private final IndexedTable<String, Variable> parameters;
     private final DoubleSupplier[] expressionTrees;
@@ -97,10 +96,10 @@ public final class DiMathLambda implements Mappable, Supplier<double[]> {
         else throw new IllegalArgumentException("Referencia a variable \"" + id + "\" no encontrada");
     }
 
-    public void setValues(double... values) {
+    public void setParameterValues(double... paremeterValues) {
         var variables = parameters.getValues();
-        if (variables.size() == values.length)
-            for (int i = 0; i < variables.size(); i++) variables.valueOf(i).setValue(values[i]);
+        if (variables.size() == paremeterValues.length)
+            for (int i = 0; i < variables.size(); i++) variables.valueOf(i).setValue(paremeterValues[i]);
         else throw new IllegalArgumentException("Número de valores incompatible");
     }
 
@@ -112,9 +111,8 @@ public final class DiMathLambda implements Mappable, Supplier<double[]> {
         return image;
     }
 
-    @Override
     public double[] apply(double... a) {
-        setValues(a);
+        setParameterValues(a);
         return get();
     }
 
