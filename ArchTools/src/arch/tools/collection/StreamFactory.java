@@ -8,7 +8,8 @@ import java.util.stream.*;
 
 public final class StreamFactory {
 
-    private StreamFactory() {}
+    private StreamFactory() {
+    }
 
     public static IntStream streamOf(int... integers) {
         return Arrays.stream(integers);

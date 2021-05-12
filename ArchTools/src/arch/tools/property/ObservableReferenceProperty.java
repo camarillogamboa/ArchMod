@@ -1,15 +1,16 @@
 package arch.tools.property;
 
-import arch.tools.desingpattern.observer.ObservableReference;
+import arch.tools.desingpattern.observer.Observable;
+import arch.tools.desingpattern.observer.Observer;
+import arch.tools.desingpattern.observer.event.ReferenceUpdateEvent;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.BiConsumer;
 
-public class ObservableReferenceProperty<T> extends ReferenceProperty<T> implements ObservableReference<T> {
+public class ObservableReferenceProperty<T> extends ReferenceProperty<T> implements Observable<ReferenceUpdateEvent<? super T>> {
 
-    private final List<BiConsumer<? super T, ? super T>> observers;
+    private final List<Observer<ReferenceUpdateEvent<? super T>>> observers;
 
     public ObservableReferenceProperty(T value) {
         super(value);
@@ -21,12 +22,12 @@ public class ObservableReferenceProperty<T> extends ReferenceProperty<T> impleme
     }
 
     @Override
-    public final void addObserver(BiConsumer<? super T, ? super T> observer) {
+    public final void addObserver(Observer<ReferenceUpdateEvent<? super T>> observer) {
         observers.add(Objects.requireNonNull(observer));
     }
 
     @Override
-    public final void removeObserver(BiConsumer<? super T, ? super T> observer) {
+    public final void removeObserver(Observer<ReferenceUpdateEvent<? super T>> observer) {
         observers.remove(Objects.requireNonNull(observer));
     }
 
@@ -34,7 +35,8 @@ public class ObservableReferenceProperty<T> extends ReferenceProperty<T> impleme
     public final void set(T value) {
         var oldValue = get();
         super.set(value);
-        observers.forEach(o -> o.accept(oldValue, value));
+        var event = new ReferenceUpdateEvent<T>(this, oldValue, value);
+        observers.forEach(o -> o.update(event));
     }
 
     @Override

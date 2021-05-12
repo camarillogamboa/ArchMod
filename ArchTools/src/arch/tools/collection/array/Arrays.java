@@ -8,7 +8,8 @@ import java.util.function.IntFunction;
  */
 public final class Arrays {
 
-    private Arrays() {}
+    private Arrays() {
+    }
 
     public static ByteArrayFiller fillerOf(byte[] array) {
         return new ByteArrayFiller(array);

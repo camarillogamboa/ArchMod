@@ -11,7 +11,8 @@ import static arch.tools.util.ObjectUtil.theyAreNotNull;
 
 public final class TextFileDAO {
 
-    private TextFileDAO() {}
+    private TextFileDAO() {
+    }
 
     public static boolean create(File file, TextState textState) {
         if (!theyAreNotNull(file, textState)) return false;

@@ -1,15 +1,16 @@
 package arch.tools.property;
 
-import arch.tools.desingpattern.observer.ObservableDouble;
-import arch.tools.function.DoubleBiConsumer;
+import arch.tools.desingpattern.observer.Observable;
+import arch.tools.desingpattern.observer.Observer;
+import arch.tools.desingpattern.observer.event.DoubleUpdateEvent;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
-public class ObservableDoubleProperty extends DoubleProperty implements ObservableDouble {
+public class ObservableDoubleProperty extends DoubleProperty implements Observable<DoubleUpdateEvent> {
 
-    private final List<DoubleBiConsumer> observers;
+    private final List<Observer<DoubleUpdateEvent>> observers;
 
     public ObservableDoubleProperty(double value) {
         super(value);
@@ -21,12 +22,12 @@ public class ObservableDoubleProperty extends DoubleProperty implements Observab
     }
 
     @Override
-    public final void addObserver(DoubleBiConsumer observer) {
+    public final void addObserver(Observer<DoubleUpdateEvent> observer) {
         observers.add(Objects.requireNonNull(observer));
     }
 
     @Override
-    public final void removeObserver(DoubleBiConsumer observer) {
+    public final void removeObserver(Observer<DoubleUpdateEvent> observer) {
         observers.remove(Objects.requireNonNull(observer));
     }
 
@@ -34,7 +35,8 @@ public class ObservableDoubleProperty extends DoubleProperty implements Observab
     public final void set(double value) {
         var oldValue = get();
         super.set(value);
-        observers.forEach(o -> o.accept(oldValue, value));
+        var event = new DoubleUpdateEvent(this, oldValue, value);
+        observers.forEach(o -> o.update(event));
     }
 
     @Override

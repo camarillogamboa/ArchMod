@@ -2,6 +2,7 @@ package arch.tools.io;
 
 public final class FileStation {
 
-    private FileStation() {}
+    private FileStation() {
+    }
 
 }
