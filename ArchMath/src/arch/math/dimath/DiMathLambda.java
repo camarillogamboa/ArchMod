@@ -12,9 +12,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.DoubleSupplier;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
-public final class DiMathLambda implements Supplier<double[]> {
+public final class DiMathLambda implements Supplier<double[]>, Function<double[],double[]> {
 
     private final IndexedTable<String, Variable> parameters;
     private final DoubleSupplier[] expressionTrees;
@@ -53,7 +54,7 @@ public final class DiMathLambda implements Supplier<double[]> {
                     }
                     s.push(new EntryNodeBase<>(sy, ds));
                 }
-            } catch (IllegalArgumentException ex) {
+            } catch (Exception ex) {
                 throw new DiMathException(ex);
             }
 
@@ -111,6 +112,7 @@ public final class DiMathLambda implements Supplier<double[]> {
         return image;
     }
 
+    @Override
     public double[] apply(double... a) {
         setParameterValues(a);
         return get();

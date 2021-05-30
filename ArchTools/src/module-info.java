@@ -8,6 +8,7 @@ module arch.tools {
     exports arch.tools.collection.iterator;
     exports arch.tools.collection.node;
     exports arch.tools.collection.table;
+    exports arch.tools.desingpattern.dao;
     exports arch.tools.desingpattern.layeredcontrol;
     exports arch.tools.desingpattern.memento;
     exports arch.tools.desingpattern.observer;
@@ -17,7 +18,8 @@ module arch.tools {
     exports arch.tools.function;
     exports arch.tools.io;
     exports arch.tools.io.textfile;
-    exports arch.tools.util;
+    exports arch.tools.object;
     exports arch.tools.property;
+    exports arch.tools;
 
 }

@@ -7,7 +7,7 @@ import java.io.*;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-import static arch.tools.util.ObjectUtil.theyAreNotNull;
+import static arch.tools.object.ObjectUtil.theyAreNotNull;
 
 public final class TextFileDAO {
 

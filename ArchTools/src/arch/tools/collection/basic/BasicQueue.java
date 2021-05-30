@@ -2,7 +2,7 @@ package arch.tools.collection.basic;
 
 import arch.tools.collection.Sizable;
 import arch.tools.collection.node.LinkedNode;
-import arch.tools.util.ObjectUtil;
+import arch.tools.object.ObjectUtil;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;

@@ -1,4 +1,4 @@
-package arch.tools.util;
+package arch.tools;
 
 import arch.tools.collection.iterator.Iterators;
 

@@ -5,7 +5,7 @@ import arch.math.dimath.DiMathLambdaSet;
 import arch.math.dimath.Lexeme;
 import arch.math.dimath.SignatureSet;
 import arch.tools.io.textfile.TextFileDAO;
-import arch.tools.util.StringUtil;
+import arch.tools.StringUtil;
 
 import java.io.File;
 import java.io.IOException;

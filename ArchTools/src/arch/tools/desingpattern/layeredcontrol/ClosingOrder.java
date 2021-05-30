@@ -1,19 +1,19 @@
 package arch.tools.desingpattern.layeredcontrol;
 
-import arch.tools.util.RunnableAssistant;
+import arch.tools.ExtendedRunnable;
 
 import java.util.Objects;
 
-public final class ClosingOrder implements Runnable {
+public final class ClosingOrder implements ExtendedRunnable {
 
-    public static final ClosingOrder DEFAULT_CLOSE_ORDER = new ClosingOrder(RunnableAssistant.EMPTY_RUNNABLE, true);
+    public static final ClosingOrder DEFAULT_CLOSE_ORDER = new ClosingOrder(ExtendedRunnable.EMPTY, true);
 
     private final Runnable closeAction;
     private final boolean allowed;
     private boolean consumed;
 
-    public ClosingOrder(Runnable closeAction, boolean allowed) {
-        this.closeAction = Objects.requireNonNull(closeAction);
+    public ClosingOrder(Runnable closingAction, boolean allowed) {
+        this.closeAction = Objects.requireNonNull(closingAction);
         this.allowed = allowed;
         this.consumed = false;
     }

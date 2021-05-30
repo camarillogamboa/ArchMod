@@ -230,4 +230,16 @@ public final class Iterators {
         return new Pointer<>(iterator);
     }
 
+    public static <E> int hashCode(Iterator<E> iterator) {
+        if (iterator == null) return 0;
+
+        int result = 1;
+
+        while (iterator.hasNext()) {
+            var element = iterator.next();
+            result = 31 * result + (element == null ? 0 : element.hashCode());
+        }
+        return result;
+    }
+
 }

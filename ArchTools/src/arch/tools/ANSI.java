@@ -1,4 +1,4 @@
-package arch.tools.util;
+package arch.tools;
 
 public interface ANSI {
 

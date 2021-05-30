@@ -1,4 +1,4 @@
-package arch.tools.util;
+package arch.tools.object;
 
 import java.util.Iterator;
 import java.util.Objects;

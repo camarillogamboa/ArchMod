@@ -1,7 +1,7 @@
 package arch.tools.collection;
 
 import arch.tools.collection.node.DoubleLinkedNode;
-import arch.tools.util.ObjectUtil;
+import arch.tools.object.ObjectUtil;
 
 import java.util.EmptyStackException;
 import java.util.Iterator;

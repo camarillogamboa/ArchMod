@@ -2,12 +2,15 @@ package arch.math.dimath;
 
 import arch.math.operator.DoubleArithmetic;
 import arch.math.operator.Function;
+import arch.tools.collection.ReferenceAccesMap;
 import arch.tools.collection.array.ReadOnlyReferenceVector;
 import arch.tools.collection.array.ReferenceArrayFiller;
 import arch.tools.collection.node.ComparableEntryNodeBase;
 import arch.tools.collection.table.IndexedTable;
+import arch.tools.desingpattern.dao.DataAccesObject;
+import arch.tools.object.NotCreationException;
+import arch.tools.object.NotReadException;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.DoubleBinaryOperator;
@@ -16,48 +19,44 @@ import java.util.function.DoubleUnaryOperator;
 
 public interface DiMathUtil {
 
-    Map<String, DoubleUnaryOperator> FUNCTIONS = new HashMap<>() {
-        {
-            put("sin", Function.SIN);
-            put("cos", Function.COS);
-            put("tan", Function.TAN);
-            put("asin", Function.ASIN);
-            put("acos", Function.ACOS);
-            put("atan", Function.ATAN);
-            put("csc", Function.CSC);
-            put("sec", Function.SEC);
-            put("cot", Function.COT);
-            put("sinh", Function.SINH);
-            put("cosh", Function.COSH);
-            put("tanh", Function.TANH);
-            put("csch", Function.CSCH);
-            put("sech", Function.SECH);
-            put("coth", Function.COTH);
-            put("asinh", Function.ASINH);
-            put("acosh", Function.ACOSH);
-            put("atanh", Function.ATANH);
-            put("acoth", Function.ACOTH);
-            put("asech", Function.ASECH);
-            put("acsch", Function.ACSCH);
-            put("log", Function.LOG);
-            put("log10", Function.LOG_10);
-            put("exp", Function.EXP);
-            put("sqrt", Function.SQRT);
-            put("cbrt", Function.CBRT);
-            put("abs", Function.ABS);
-            put("neg", Function.NEG);
-            put("rad", Function.TO_RADIANS);
-            put("deg", Function.TO_DEGREES);
-            put("inv", Function.INV);
+    DataAccesObject<String,DoubleUnaryOperator> FUNCTIONS = new ReferenceAccesMap<>(){{
+        try {
+            create("sin", Function.SIN);
+            create("cos", Function.COS);
+            create("tan", Function.TAN);
+            create("asin", Function.ASIN);
+            create("acos", Function.ACOS);
+            create("atan", Function.ATAN);
+            create("csc", Function.CSC);
+            create("sec", Function.SEC);
+            create("cot", Function.COT);
+            create("sinh", Function.SINH);
+            create("cosh", Function.COSH);
+            create("tanh", Function.TANH);
+            create("csch", Function.CSCH);
+            create("sech", Function.SECH);
+            create("coth", Function.COTH);
+            create("asinh", Function.ASINH);
+            create("acosh", Function.ACOSH);
+            create("atanh", Function.ATANH);
+            create("acoth", Function.ACOTH);
+            create("asech", Function.ASECH);
+            create("acsch", Function.ACSCH);
+            create("log", Function.LOG);
+            create("log10", Function.LOG_10);
+            create("exp", Function.EXP);
+            create("sqrt", Function.SQRT);
+            create("cbrt", Function.CBRT);
+            create("abs", Function.ABS);
+            create("neg", Function.NEG);
+            create("rad", Function.TO_RADIANS);
+            create("deg", Function.TO_DEGREES);
+            create("inv", Function.INV);
+        } catch (NotCreationException ignored) {
+
         }
 
-        @Override
-        public DoubleUnaryOperator get(Object key) {
-            var value = super.get(key);
-            if (value != null) return value;
-            else throw new IllegalArgumentException("Nombre de función no reconocida: \"" + key.toString() + "\"");
-        }
-    };
+    }};
 
     static DoubleSupplier parseLiteral(String literal) throws NumberFormatException {
         return parseDouble(Double.parseDouble(literal));
@@ -87,7 +86,7 @@ public interface DiMathUtil {
         };
     }
 
-    static DoubleSupplier parseFunctionAndJoin(String symbol, DoubleSupplier a) throws IllegalStateException {
+    static DoubleSupplier parseFunctionAndJoin(String symbol, DoubleSupplier a) throws NotReadException {
         return joinFunctionAndValuable(parseFunction(symbol), a);
     }
 
@@ -95,8 +94,8 @@ public interface DiMathUtil {
         return () -> u.applyAsDouble(a.getAsDouble());
     }
 
-    static DoubleUnaryOperator parseFunction(String symbol) throws IllegalArgumentException {
-        return FUNCTIONS.get(symbol);
+    static DoubleUnaryOperator parseFunction(String symbol) throws NotReadException {
+        return FUNCTIONS.read(symbol);
     }
 
     static IndexedTable<String, Variable> toIndexedTable(List<Lexeme> vars) {
